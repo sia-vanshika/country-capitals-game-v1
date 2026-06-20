@@ -39,6 +39,7 @@ const welcomeMessage = document.querySelector("#welcome-message");
 const learningSection = document.querySelector("#learning-section");
 
 // Find all of the continent buttons.
+const continentPicker = document.querySelector("#continent-picker");
 const continentButtons = document.querySelectorAll(".continent-button");
 
 // Find the place where flashcards will be added.
@@ -47,6 +48,11 @@ const countryList = document.querySelector("#country-list");
 // Find the loading and error messages.
 const loadingMessage = document.querySelector("#loading-message");
 const errorMessage = document.querySelector("#error-message");
+const newCountriesModeSection = document.querySelector("#new-countries-mode-section");
+const newCountriesSelectionLabel = document.querySelector("#new-countries-selection-label");
+const newCountriesQuizButton = document.querySelector("#new-countries-quiz-button");
+const newCountriesFlashcardsButton = document.querySelector("#new-countries-flashcards-button");
+const quizCurrentFlashcardsButton = document.querySelector("#quiz-current-flashcards-button");
 
 // Find the button that opens the Master List.
 const masterListButton = document.querySelector("#master-list-button");
@@ -100,8 +106,11 @@ const answerChoices = document.querySelector("#answer-choices");
 const practiceFeedback = document.querySelector("#practice-feedback");
 const nextQuestionButton = document.querySelector("#next-question-button");
 
-// This is the base REST Countries API URL.
-const restCountriesBaseUrl = "https://restcountries.com/v3.1";
+// This local JSON file is the app's source of truth, so country learning can work offline.
+const localCountryDataUrl = "countries.json";
+
+// This friendly message appears if the bundled local data cannot load.
+const countryDataLoadErrorMessage = "Country data could not load right now. Please refresh the app and try again.";
 
 // This name is used when saving all profiles in localStorage.
 const savedProfilesKey = "countryCapitalProfiles";
@@ -115,69 +124,71 @@ const oldSavedCountryDataKey = "masterCountryData";
 const oldSavedStatusKey = "countryStatuses";
 const oldSavedCoinsKey = "coins";
 
-// These settings tell the app how each continent button should use the API.
-// REST Countries uses "Americas" as a region, so North and South America are filtered by subregion.
+// These are the continent groups supported by the local countries.json file.
 const continentSettings = [
-  { name: "Europe", apiRegion: "europe", regions: ["Europe"] },
-  { name: "Asia", apiRegion: "asia", regions: ["Asia"] },
-  { name: "Africa", apiRegion: "africa", regions: ["Africa"] },
-  { name: "North America", apiRegion: "americas", subregions: ["North America", "Central America", "Caribbean"] },
-  { name: "South America", apiRegion: "americas", subregions: ["South America"] },
-  { name: "Oceania", apiRegion: "oceania", regions: ["Oceania"] }
+  { name: "Europe" },
+  { name: "Asia" },
+  { name: "Africa" },
+  { name: "North America" },
+  { name: "South America" },
+  { name: "Oceania" }
 ];
 
+const mixAndMatchOptionName = "Mix and Match";
+
 // These landmark choices are used as profile avatars.
-// Each option has an id for saving, a name for the screen, and a realistic image.
+// Remote image URLs were removed so avatars load reliably offline and in app-store builds.
+// The local avatar assets live in assets/avatars, and avatar cards load them through img.src.
 const landmarkOptions = [
   {
     id: "eiffel-tower",
     name: "Eiffel Tower",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Eiffel_Tower_in_2022_06.jpg?width=640"
+    image: "assets/avatars/eiffel-tower.svg"
   },
   {
     id: "statue-of-liberty",
     name: "Statue of Liberty",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Statue_of_Liberty%2C_NY.jpg?width=640"
+    image: "assets/avatars/statue-of-liberty.svg"
   },
   {
     id: "taj-mahal",
     name: "Taj Mahal",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Taj_Mahal_%28Edited%29.jpeg?width=640"
+    image: "assets/avatars/taj-mahal.svg"
   },
   {
     id: "colosseum",
     name: "Colosseum",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Rome_%28IT%29%2C_Kolosseum_--_2013_--_3400.jpg?width=640"
+    image: "assets/avatars/colosseum.svg"
   },
   {
     id: "sydney-opera-house",
     name: "Sydney Opera House",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Sydney_%28AU%29%2C_Opera_House_--_2019_--_2994.jpg?width=640"
+    image: "assets/avatars/sydney-opera-house.svg"
   },
   {
     id: "great-wall",
     name: "Great Wall of China",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Great_Wall_of_China_July_2006.JPG?width=640"
+    image: "assets/avatars/great-wall.svg"
   },
   {
     id: "great-pyramid",
     name: "Great Pyramid of Giza",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Great_Pyramid_%28Pyramid_of_Cheops_Khufu%29%2C_Giza%2C_GG%2C_EGY_%2847902782131%29.jpg?width=640"
+    image: "assets/avatars/great-pyramid.svg"
   },
   {
     id: "christ-redeemer",
     name: "Christ the Redeemer",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Christ_the_Redeemer.jpg?width=640"
+    image: "assets/avatars/christ-redeemer.svg"
   },
   {
     id: "mount-fuji",
     name: "Mount Fuji",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/MountFuji.jpg?width=640"
+    image: "assets/avatars/mount-fuji.svg"
   },
   {
     id: "neuschwanstein",
     name: "Neuschwanstein Castle",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Neuschwanstein_Castle_2024.jpg?width=640"
+    image: "assets/avatars/neuschwanstein-castle.svg"
   }
 ];
 
@@ -234,12 +245,15 @@ const masteryBonusCoins = 5;
 // This keeps the celebration under 2 seconds.
 const masteryCelebrationDuration = 1800;
 
-// An API is a service that gives data to an app.
-// REST Countries is an API that gives country names, capitals, and more.
+// This list holds the currently loaded country records from countries.json.
 let countryCapitalList = [];
 
 // This object stores fetched countries so the app does not fetch the same continent twice.
 const countryDataByContinent = {};
+
+// This caches the bundled JSON after the first successful load.
+let localCountryData = null;
+let localCountryDataLoadPromise = null;
 
 // These are the 5 countries shown on the current set of flashcards.
 let countriesToLearn = [];
@@ -248,8 +262,20 @@ let countriesToLearn = [];
 // It stores countries, not capitals, so the checkmark belongs to the country card.
 const selectedCountryCards = [];
 
-// This stores the currently selected continent button.
-// It starts blank so no continent is selected until the player chooses one.
+// This stores the unlearned countries from the selected Mix and Match or continent set.
+let newCountriesSelectionPool = [];
+
+// This stores the country set currently being used by New Countries Quiz mode.
+let newCountriesQuizPool = [];
+
+// This stores the current New Countries Quiz question.
+let currentNewCountriesQuizItem = null;
+
+// This tells the shared Next Question button which quiz flow is currently active.
+let activePracticeQuestionMode = "previousCountries";
+
+// This stores the currently selected Practice New Countries option.
+// It starts blank so no country set is selected until the player chooses one.
 let selectedContinent = "";
 
 // This tracks what the bottom New Countries button should do right now.
@@ -543,7 +569,7 @@ async function calculateWorldProgress() {
   let totalMasteredCountries = 0;
   let totalWorldCountries = 0;
 
-  // Each continent uses the same API loading and filtering as Practice New Countries.
+  // Each continent uses the same local-data loading and filtering as Practice New Countries.
   for (let index = 0; index < continentSettings.length; index = index + 1) {
     const continentName = continentSettings[index].name;
     const countries = await loadCountriesForContinent(continentName);
@@ -1091,6 +1117,7 @@ function showLandmarkChoices(selectedAvatarId) {
 
     const avatarImage = document.createElement("img");
     avatarImage.classList.add("avatar-image");
+    // Each card uses the local SVG path from landmarkOptions, so no internet image request is needed.
     avatarImage.src = landmark.image;
     avatarImage.alt = landmark.name;
     avatarImage.loading = "lazy";
@@ -1379,6 +1406,13 @@ function showGameForSelectedProfile() {
   loadingMessage.classList.add("hidden");
   errorMessage.classList.add("hidden");
   nextQuestionButton.classList.add("hidden");
+  newCountriesModeSection.classList.add("hidden");
+  quizCurrentFlashcardsButton.classList.add("hidden");
+  continentPicker.classList.remove("hidden");
+  newCountriesSelectionPool = [];
+  newCountriesQuizPool = [];
+  currentNewCountriesQuizItem = null;
+  activePracticeQuestionMode = "previousCountries";
 
   selectedContinent = "";
   updateActiveContinentButton(selectedContinent);
@@ -1415,37 +1449,86 @@ function selectProfile(profileIndex) {
   showGameForSelectedProfile();
 }
 
-// Find the settings for the selected continent.
-function findContinentSetting(continentName) {
-  return continentSettings.find(function (setting) {
-    return setting.name === continentName;
+// This validates one countries.json record and keeps the shape the game already uses.
+function normalizeCountryRecord(country) {
+  const countryName = typeof country.country === "string" ? country.country.trim() : "";
+  const capital = typeof country.capital === "string" ? country.capital.trim() : "";
+  const continent = typeof country.continent === "string" ? country.continent.trim() : "";
+
+  if (!countryName || !capital || !continent) {
+    return null;
+  }
+
+  return {
+    country: countryName,
+    capital: capital,
+    continent: continent
+  };
+}
+
+// This keeps country records sorted and removes entries without the fields the app needs.
+function normalizeCountryRecords(countries) {
+  return countries
+    .map(function (country) {
+      return normalizeCountryRecord(country);
+    })
+    .filter(function (country) {
+      return country !== null;
+    })
+    .sort(function (firstCountry, secondCountry) {
+      return firstCountry.country.localeCompare(secondCountry.country);
+    });
+}
+
+// This loads countries.json from the app bundle, keeping country learning offline-friendly.
+// The local file is permanent source of truth because app-store builds cannot depend on a live country API.
+async function loadLocalCountryData() {
+  if (localCountryData !== null) {
+    return localCountryData;
+  }
+
+  if (localCountryDataLoadPromise !== null) {
+    return localCountryDataLoadPromise;
+  }
+
+  localCountryDataLoadPromise = fetch(localCountryDataUrl)
+    .then(async function (response) {
+      if (!response.ok) {
+        throw new Error("Could not load local country data.");
+      }
+
+      const data = await response.json();
+
+      if (!Array.isArray(data)) {
+        throw new Error("Local country data is not an array.");
+      }
+
+      const normalizedData = normalizeCountryRecords(data);
+
+      if (normalizedData.length === 0) {
+        throw new Error("Local country data is empty.");
+      }
+
+      localCountryData = normalizedData;
+      return localCountryData;
+    })
+    .catch(function (error) {
+      // If the local JSON load fails, clear the promise so a later retry can try again.
+      localCountryDataLoadPromise = null;
+      throw error;
+    });
+
+  return localCountryDataLoadPromise;
+}
+
+// Continent filtering now reads the continent field that is stored directly in countries.json.
+function getCountriesForContinent(countries, continentName) {
+  return countries.filter(function (country) {
+    return country.continent === continentName;
   });
 }
 
-// Build the API URL for the selected continent.
-function buildCountriesUrl(continentName) {
-  const setting = findContinentSetting(continentName);
-
-  // The API filters first by broad REST Countries region.
-  // JavaScript does extra filtering after the data comes back.
-  return restCountriesBaseUrl + "/region/" + setting.apiRegion + "?fields=name,capital,region,subregion";
-}
-
-// Check whether one API country belongs to the selected continent.
-function countryBelongsToContinent(country, continentName) {
-  const setting = findContinentSetting(continentName);
-
-  // Europe, Asia, Africa, and Oceania can be checked by region.
-  if (setting.regions) {
-    return setting.regions.includes(country.region);
-  }
-
-  // North America and South America are checked by subregion.
-  return setting.subregions.includes(country.subregion);
-}
-
-// fetch asks an API for data.
-// await tells JavaScript to wait until the API sends a response.
+// Country loading uses only local JSON, so the app works with no internet connection.
 async function loadCountriesForContinent(continentName) {
   // If the continent was already fetched, use the saved copy.
   if (countryDataByContinent[continentName]) {
@@ -1453,36 +1536,45 @@ async function loadCountriesForContinent(continentName) {
     return countryCapitalList;
   }
 
-  const response = await fetch(buildCountriesUrl(continentName));
+  try {
+    const localCountries = await loadLocalCountryData();
+    const filteredLocalCountries = getCountriesForContinent(localCountries, continentName);
 
-  if (!response.ok) {
-    throw new Error("Could not load countries.");
+    if (filteredLocalCountries.length === 0) {
+      throw new Error("Local country data did not include " + continentName + ".");
+    }
+
+    countryDataByContinent[continentName] = filteredLocalCountries;
+    countryCapitalList = filteredLocalCountries;
+    return countryCapitalList;
+  } catch (error) {
+    // If countries.json cannot load or does not include this continent, callers show a friendly message.
+    throw new Error(countryDataLoadErrorMessage);
   }
+}
 
-  const data = await response.json();
+// This checks whether the player chose the special mixed country set.
+function isMixAndMatchSelection(selectionName) {
+  return selectionName === mixAndMatchOptionName;
+}
 
-  // The API returns country objects.
-  // This filters them to the selected continent and keeps only countries with capitals.
-  const filteredCountries = data
-    .filter(function (country) {
-      return countryBelongsToContinent(country, continentName);
-    })
-    .filter(function (country) {
-      return country.name && country.name.common && country.capital && country.capital.length > 0;
-    })
-    .map(function (country) {
-      return {
-        country: country.name.common,
-        capital: country.capital[0]
-      };
-    })
-    .sort(function (firstCountry, secondCountry) {
-      return firstCountry.country.localeCompare(secondCountry.country);
+// Mix and Match loads countries from every configured continent by reusing the same
+// local-JSON-first loader, then combines those continent lists into one array.
+async function loadCountriesForMixAndMatch() {
+  const countryGroups = await Promise.all(continentSettings.map(function (setting) {
+    return loadCountriesForContinent(setting.name);
+  }));
+
+  const combinedCountries = [];
+
+  countryGroups.forEach(function (countries) {
+    countries.forEach(function (country) {
+      combinedCountries.push(country);
     });
+  });
 
-  countryDataByContinent[continentName] = filteredCountries;
-  countryCapitalList = filteredCountries;
-  return countryCapitalList;
+  countryCapitalList = combinedCountries;
+  return combinedCountries;
 }
 
 // Shuffle an array so items appear in a random order.
@@ -1494,7 +1586,7 @@ function shuffleArray(array) {
 
 // Choose 5 countries from the selected continent array.
 function chooseFiveCountries(countries) {
-  // slice() makes a copy, so the original API data stays safe.
+  // slice() makes a copy, so the original local data stays safe.
   const shuffledCountries = shuffleArray(countries.slice());
 
   // slice(0, 5) picks the first 5 countries from the shuffled copy.
@@ -1507,6 +1599,153 @@ function getNewCountriesOnly(countries) {
   return countries.filter(function (item) {
     return !masterCountries.includes(item.country);
   });
+}
+
+// This loads the selected set for the 2-step Practice New Countries flow.
+// Mix and Match uses every continent; continent choices use only the matching countries.json continent.
+async function loadCountriesForPracticeSelection(selectionName) {
+  if (isMixAndMatchSelection(selectionName)) {
+    return loadCountriesForMixAndMatch();
+  }
+
+  return loadCountriesForContinent(selectionName);
+}
+
+// After the player picks Mix and Match or a continent, this shows the second step: Quiz or Flash Cards.
+function showNewCountriesModeChoice(selectionName, countries) {
+  newCountriesSelectionPool = countries.slice();
+  countriesToLearn = [];
+  countryList.innerHTML = "";
+  selectedCountryCards.length = 0;
+  quizCurrentFlashcardsButton.classList.add("hidden");
+  continentPicker.classList.add("hidden");
+  newCountriesSelectionLabel.textContent = selectionName + " selected";
+  newCountriesModeSection.classList.remove("hidden");
+}
+
+// This builds multiple-choice answers from the selected New Countries quiz set.
+function buildAnswerChoicesFromCountryItems(countryItems, correctCapital) {
+  const capitals = countryItems
+    .map(function (item) {
+      return item.capital;
+    })
+    .filter(function (capital, index, allCapitals) {
+      return capital !== "" && allCapitals.indexOf(capital) === index;
+    });
+
+  const wrongCapitals = capitals.filter(function (capital) {
+    return capital !== correctCapital;
+  });
+
+  const choices = shuffleArray(wrongCapitals).slice(0, 3);
+  choices.push(correctCapital);
+  return shuffleArray(choices);
+}
+
+// Flash Cards mode shows 5 countries from the selected set and keeps them for Quiz Me.
+function startNewCountriesFlashCardsMode() {
+  if (newCountriesSelectionPool.length === 0) {
+    errorMessage.textContent = "No new countries are available for this choice yet.";
+    errorMessage.classList.remove("hidden");
+    return;
+  }
+
+  newCountriesModeSection.classList.add("hidden");
+  errorMessage.classList.add("hidden");
+
+  // The 5-card set is saved in countriesToLearn so Quiz Me can use exactly these flash cards.
+  countriesToLearn = chooseFiveCountries(newCountriesSelectionPool);
+  showFlashcards(countriesToLearn);
+  quizCurrentFlashcardsButton.classList.remove("hidden");
+}
+
+// Quiz Me starts from the exact 5-card flashcard set that is currently on screen.
+function startQuizFromCurrentFlashCards() {
+  if (countriesToLearn.length === 0) {
+    return;
+  }
+
+  startNewCountriesQuiz(countriesToLearn);
+}
+
+// Quiz mode uses the selected Mix and Match or continent set and asks one country at a time.
+function startNewCountriesQuiz(countries) {
+  activePracticeQuestionMode = "newCountries";
+  newCountriesQuizPool = countries.slice();
+  currentNewCountriesQuizItem = null;
+
+  welcomeMessage.classList.add("hidden");
+  learningSection.classList.add("hidden");
+  previousCountriesSection.classList.add("hidden");
+  masterListSection.classList.add("hidden");
+  storeSection.classList.add("hidden");
+  worldMapSection.classList.add("hidden");
+  profileHomeBackButton.classList.add("hidden");
+  practiceSection.classList.remove("hidden");
+  updateCoinDisplay();
+  answerChoices.innerHTML = "";
+  practiceFeedback.textContent = "";
+  nextQuestionButton.classList.add("hidden");
+
+  showNewCountriesQuizQuestion();
+}
+
+// This shows one New Countries Quiz question from the selected country set.
+function showNewCountriesQuizQuestion() {
+  if (newCountriesQuizPool.length === 0) {
+    currentNewCountriesQuizItem = null;
+    practiceQuestion.textContent = "Nice! You finished this quiz.";
+    answerChoices.innerHTML = "";
+    practiceFeedback.textContent = "";
+    nextQuestionButton.classList.add("hidden");
+    return;
+  }
+
+  currentNewCountriesQuizItem = pickRandomItem(newCountriesQuizPool);
+
+  const correctCapital = currentNewCountriesQuizItem.capital;
+  const choices = buildAnswerChoicesFromCountryItems(newCountriesQuizPool, correctCapital);
+
+  practiceQuestion.textContent = "What is the capital of " + currentNewCountriesQuizItem.country + "?";
+  practiceFeedback.textContent = "";
+  answerChoices.innerHTML = "";
+  nextQuestionButton.classList.add("hidden");
+
+  choices.forEach(function (choice) {
+    const choiceButton = document.createElement("button");
+    choiceButton.classList.add("choice-button");
+    choiceButton.type = "button";
+    choiceButton.textContent = choice;
+
+    choiceButton.addEventListener("click", function () {
+      checkNewCountriesQuizAnswer(choice, correctCapital);
+    });
+
+    answerChoices.appendChild(choiceButton);
+  });
+}
+
+// Correct New Countries Quiz answers add that country to the learned countries list.
+function checkNewCountriesQuizAnswer(selectedCapital, correctCapital) {
+  const choiceButtons = document.querySelectorAll(".choice-button");
+
+  choiceButtons.forEach(function (button) {
+    button.disabled = true;
+  });
+
+  if (selectedCapital === correctCapital) {
+    addCountryToMasterList(currentNewCountriesQuizItem);
+
+    newCountriesQuizPool = newCountriesQuizPool.filter(function (item) {
+      return item.country !== currentNewCountriesQuizItem.country;
+    });
+
+    practiceFeedback.textContent = "Correct! " + currentNewCountriesQuizItem.country + " was added to your learned countries.";
+  } else {
+    practiceFeedback.textContent = "Not quite. The correct answer is " + correctCapital + ".";
+  }
+
+  nextQuestionButton.classList.remove("hidden");
 }
 
 // Add or remove the selected state for one country card.
@@ -1768,6 +2007,9 @@ function showNewCountries() {
   // Opening the New Countries page starts with no continent selected.
   // The player chooses a continent before countries are shown.
   selectedContinent = "";
+  newCountriesSelectionPool = [];
+  newCountriesQuizPool = [];
+  currentNewCountriesQuizItem = null;
   updateActiveContinentButton(selectedContinent);
 
   welcomeMessage.classList.add("hidden");
@@ -1778,6 +2020,9 @@ function showNewCountries() {
   worldMapSection.classList.add("hidden");
   profileHomeBackButton.classList.add("hidden");
   learningSection.classList.remove("hidden");
+  continentPicker.classList.remove("hidden");
+  newCountriesModeSection.classList.add("hidden");
+  quizCurrentFlashcardsButton.classList.add("hidden");
   loadingMessage.classList.add("hidden");
   errorMessage.classList.add("hidden");
   countryList.innerHTML = "";
@@ -1892,10 +2137,10 @@ function updateCountryStatus(country, status) {
 
 // Add one interacted-with country to the Master List without adding duplicates.
 function addCountryToMasterList(item) {
-  // This function runs after a flashcard is flipped, so the Master List tracks real user interaction.
-  // Just displaying a card does not save it as learned.
+  // This runs after a flashcard is flipped or a New Countries Quiz answer is correct.
+  // Just displaying a card or question does not save it as learned.
   if (!masterCountries.includes(item.country)) {
-    // The country name gets added here after the flip happens.
+    // The country name gets added here after the player interacts with it.
     masterCountries.push(item.country);
   }
 
@@ -2098,6 +2343,7 @@ function checkPracticeAnswer(selectedCapital, correctCapital) {
 
 // Start Practice Mode using only countries from the Master List.
 async function startPracticeMode() {
+  activePracticeQuestionMode = "previousCountries";
   welcomeMessage.classList.add("hidden");
   learningSection.classList.add("hidden");
   previousCountriesSection.classList.add("hidden");
@@ -2113,12 +2359,16 @@ async function startPracticeMode() {
 
   try {
     if (selectedContinent !== "") {
-      await loadCountriesForContinent(selectedContinent);
+      if (isMixAndMatchSelection(selectedContinent)) {
+        await loadCountriesForMixAndMatch();
+      } else {
+        await loadCountriesForContinent(selectedContinent);
+      }
     }
 
     showPracticeQuestion();
   } catch (error) {
-    practiceQuestion.textContent = "Practice needs country data. Please try again.";
+    practiceQuestion.textContent = countryDataLoadErrorMessage;
   }
 }
 
@@ -2133,18 +2383,22 @@ function updateActiveContinentButton(continentName) {
   });
 }
 
-// Load and show countries for one continent.
+// Step 1 of Practice New Countries: choose Mix and Match or a continent, then show the mode choice.
 async function showContinentCountries(continentName) {
+  const isMixAndMatch = isMixAndMatchSelection(continentName);
+
   selectedContinent = continentName;
   updateActiveContinentButton(continentName);
 
-  loadingMessage.textContent = "Loading " + continentName + " countries...";
+  loadingMessage.textContent = isMixAndMatch ? "Loading countries from around the world..." : "Loading " + continentName + " countries...";
   loadingMessage.classList.remove("hidden");
   errorMessage.classList.add("hidden");
   countryList.innerHTML = "";
+  quizCurrentFlashcardsButton.classList.add("hidden");
+  newCountriesModeSection.classList.add("hidden");
 
   try {
-    const countries = await loadCountriesForContinent(continentName);
+    const countries = await loadCountriesForPracticeSelection(continentName);
 
     if (selectedContinent !== continentName) {
       return;
@@ -2154,21 +2408,16 @@ async function showContinentCountries(continentName) {
 
     if (newCountries.length === 0) {
       loadingMessage.classList.add("hidden");
-      errorMessage.textContent = "You have already learned the available " + continentName + " countries. Try another continent!";
+      errorMessage.textContent = isMixAndMatch ? "You have already learned the available countries. Try a continent-specific option!" : "You have already learned the available " + continentName + " countries. Try another continent!";
       errorMessage.classList.remove("hidden");
       return;
     }
 
-    // Choose 5 countries from the selected continent after removing learned countries.
-    const fiveCountries = chooseFiveCountries(newCountries);
+    // Step 2 is shown after loading the selected country set.
+    // Quiz uses this full set; Flash Cards picks 5 countries from it.
+    showNewCountriesModeChoice(continentName, newCountries);
 
-    countriesToLearn = fiveCountries;
-    showFlashcards(fiveCountries);
-
-    // Showing 5 cards is not the same as learning 5 countries.
-    // Each country is added to the Master List only after its card is flipped.
-
-    // The bottom button stays Back while the 5 country cards are visible.
+    // The bottom button stays Back while the mode choice, quiz, or flash cards are visible.
     // Practice Previous Countries is only updated for its count and keeps its same behavior.
     practiceButtonMode = "backToProfile";
     updateProfileActionButtons();
@@ -2180,7 +2429,8 @@ async function showContinentCountries(continentName) {
     loadingMessage.classList.add("hidden");
   } catch (error) {
     loadingMessage.classList.add("hidden");
-    errorMessage.textContent = "Could not load " + continentName + " countries. Please check your internet and try again.";
+    // This message appears if countries.json cannot load or is missing the requested continent.
+    errorMessage.textContent = countryDataLoadErrorMessage;
     errorMessage.classList.remove("hidden");
   }
 }
@@ -2255,12 +2505,26 @@ backFromAvatarButton.addEventListener("click", function () {
   goBackFromAvatarSelection();
 });
 
-// Each continent button uses its data-continent value to choose what to load.
+// Each Practice New Countries option uses its data-continent value to choose what to load.
 continentButtons.forEach(function (button) {
   button.addEventListener("click", function () {
     const continentName = button.dataset.continent;
     showContinentCountries(continentName);
   });
+});
+
+// The second step lets the player choose a quiz from the selected set or flash cards first.
+newCountriesQuizButton.addEventListener("click", function () {
+  startNewCountriesQuiz(newCountriesSelectionPool);
+});
+
+// Flash Cards mode shows 5 cards, then its Quiz Me button uses those same 5 countries.
+newCountriesFlashcardsButton.addEventListener("click", function () {
+  startNewCountriesFlashCardsMode();
+});
+
+quizCurrentFlashcardsButton.addEventListener("click", function () {
+  startQuizFromCurrentFlashCards();
 });
 
 // Run this code when the Master List button is clicked.
@@ -2332,5 +2596,9 @@ profileHomeBackButton.addEventListener("click", function () {
 
 // Run this code when the Next Question button is clicked.
 nextQuestionButton.addEventListener("click", function () {
-  showPracticeQuestion();
+  if (activePracticeQuestionMode === "newCountries") {
+    showNewCountriesQuizQuestion();
+  } else {
+    showPracticeQuestion();
+  }
 });

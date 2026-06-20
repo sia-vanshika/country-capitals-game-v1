@@ -5,11 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Country Capitals Game</title>
 
-  <!-- These links load the Sour Gummy font from Google Fonts. -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Sour+Gummy:wght@400;600;700&display=swap" rel="stylesheet">
-
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -224,24 +219,47 @@
       <section id="learning-section" class="hidden">
         <h2>Countries to Learn Today</h2>
 
-        <!-- These buttons let the user choose a continent. -->
-        <div id="continent-picker" class="continent-picker" aria-label="Choose a continent">
-          <button class="continent-button" type="button" data-continent="Europe">Europe</button>
-          <button class="continent-button" type="button" data-continent="Asia">Asia</button>
-          <button class="continent-button" type="button" data-continent="Africa">Africa</button>
-          <button class="continent-button" type="button" data-continent="North America">North America</button>
-          <button class="continent-button" type="button" data-continent="South America">South America</button>
-          <button class="continent-button" type="button" data-continent="Oceania">Oceania</button>
+        <!-- These buttons let the user choose a mixed set first, then keep continent-specific options grouped below it. -->
+        <div id="continent-picker" class="continent-picker" aria-label="Choose countries to learn">
+          <button class="continent-button mix-match-button" type="button" data-continent="Mix and Match">Mix and Match</button>
+
+          <!-- The OR separator shows Mix and Match is one path, while the grouped continent buttons are another path. -->
+          <div class="choice-separator" aria-hidden="true">
+            <span></span>
+            <strong>OR</strong>
+            <span></span>
+          </div>
+
+          <!-- The continent options remain grouped together below Mix and Match in the same order as before. -->
+          <div class="continent-options-group" aria-label="Choose one continent">
+            <button class="continent-button" type="button" data-continent="Europe">Europe</button>
+            <button class="continent-button" type="button" data-continent="Asia">Asia</button>
+            <button class="continent-button" type="button" data-continent="Africa">Africa</button>
+            <button class="continent-button" type="button" data-continent="North America">North America</button>
+            <button class="continent-button" type="button" data-continent="South America">South America</button>
+            <button class="continent-button" type="button" data-continent="Oceania">Oceania</button>
+          </div>
         </div>
 
-        <!-- This message appears while countries are loading from the API. -->
+        <!-- This message appears while countries are loading from the bundled JSON file. -->
         <p id="loading-message" class="hidden">Loading European countries...</p>
 
-        <!-- This message appears if the API cannot load. -->
+        <!-- This message appears if the bundled country data cannot load. -->
         <p id="error-message" class="hidden"></p>
+
+        <!-- The 2-step flow shows this after the user picks Mix and Match or one continent. -->
+        <section id="new-countries-mode-section" class="new-countries-mode-section hidden">
+          <h3>Choose Practice Type</h3>
+          <p id="new-countries-selection-label"></p>
+          <div class="new-countries-mode-buttons">
+            <button id="new-countries-quiz-button" type="button">Quiz</button>
+            <button id="new-countries-flashcards-button" type="button">Flash Cards</button>
+          </div>
+        </section>
 
         <!-- JavaScript will add 5 flashcards here. -->
         <div id="country-list" class="country-list"></div>
+        <button id="quiz-current-flashcards-button" class="hidden" type="button">Quiz Me</button>
       </section>
 
       <!-- These profile action buttons stay aligned and update with JavaScript. -->

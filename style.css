@@ -264,11 +264,10 @@ body {
   color: #be123c;
 }
 
-/* This applies the Sour Gummy font to the whole app. */
-/* The fallback fonts are used if Google Fonts cannot load. */
+/* This uses only local/system fonts so the app can run offline. */
 body,
 button {
-  font-family: "Sour Gummy", Arial, sans-serif;
+  font-family: "Trebuchet MS", Arial, sans-serif;
   font-weight: 400;
 }
 
@@ -751,13 +750,13 @@ label {
   border: 2px solid white;
 }
 
-/* This styles the loading message for API data. */
+/* This styles the loading message for bundled country data. */
 #loading-message {
   color: #2563eb;
   font-weight: bold;
 }
 
-/* This styles the error message if API data cannot load. */
+/* This styles the error message if bundled country data cannot load. */
 #error-message {
   color: #be123c;
   font-weight: bold;
@@ -765,11 +764,48 @@ label {
 
 /* This holds the continent selector buttons. */
 .continent-picker {
+  display: grid;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+/* Mix and Match is the first full-width choice, while the continent buttons stay grouped below it. */
+.mix-match-button {
+  justify-self: center;
+  width: min(100%, 280px);
+}
+
+/* The OR separator explains that players can choose one mixed set or pick a specific continent. */
+.choice-separator {
+  display: grid;
+  grid-template-columns: minmax(36px, 1fr) auto minmax(36px, 1fr);
+  align-items: center;
+  gap: 10px;
+  width: min(100%, 280px);
+  margin: 2px auto;
+}
+
+/* Subtle lines visually separate Mix and Match from the grouped continent choices without distracting. */
+.choice-separator span {
+  height: 2px;
+  background-color: #bfdbfe;
+  border-radius: 999px;
+  opacity: 0.9;
+}
+
+.choice-separator strong {
+  color: #0f766e;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+/* This keeps the continent-specific options together beneath Mix and Match. */
+.continent-options-group {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 8px;
-  margin-top: 16px;
 }
 
 /* This styles each continent button. */
@@ -798,6 +834,63 @@ label {
 
 .continent-button.active:hover {
   background-color: #1d4ed8;
+}
+
+/* This second-step panel separates choosing the country set from choosing Quiz or Flash Cards. */
+.new-countries-mode-section {
+  margin-top: 18px;
+  padding: 14px;
+  background-color: #f8fafc;
+  border: 2px solid #e0f2fe;
+  border-radius: 8px;
+}
+
+#new-countries-selection-label {
+  margin: 0 0 12px;
+  color: #475569;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.new-countries-mode-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.new-countries-mode-buttons button,
+#quiz-current-flashcards-button {
+  min-height: 52px;
+  padding: 12px 14px;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+#new-countries-quiz-button {
+  background-color: #2563eb;
+}
+
+#new-countries-quiz-button:hover {
+  background-color: #1d4ed8;
+}
+
+#new-countries-flashcards-button,
+#quiz-current-flashcards-button {
+  background-color: #0f766e;
+}
+
+#new-countries-flashcards-button:hover,
+#quiz-current-flashcards-button:hover {
+  background-color: #0f5f59;
+}
+
+#quiz-current-flashcards-button {
+  width: min(100%, 280px);
+  margin: 14px auto 0;
 }
 
 /* This holds all of the country flashcards. */
@@ -1951,6 +2044,10 @@ label {
 
   .world-map-illustration {
     min-height: 130px;
+  }
+
+  .new-countries-mode-buttons {
+    grid-template-columns: 1fr;
   }
 
   .world-globe {

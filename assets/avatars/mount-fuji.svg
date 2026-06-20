@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-labelledby="title">
+  <title id="title">Mount Fuji avatar</title>
+  <rect width="320" height="240" rx="28" fill="#f5f3ff"/>
+  <circle cx="252" cy="50" r="38" fill="#fecdd3"/>
+  <path d="M34 190c46 20 92 22 138 10s76-20 114-2v42H34z" fill="#ddd6fe"/>
+  <path d="M44 198L158 58l118 140z" fill="#6d28d9"/>
+  <path d="M158 58l-34 58 20-8 16 24 20-28 24 16z" fill="#ffffff"/>
+  <path d="M76 198h176" stroke="#4c1d95" stroke-width="10" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-labelledby="title">
+  <title id="title">Colosseum avatar</title>
+  <rect width="320" height="240" rx="28" fill="#ffedd5"/>
+  <circle cx="254" cy="48" r="38" fill="#fed7aa"/>
+  <path d="M46 192h228V98c-46-50-182-50-228 0z" fill="#c2410c"/>
+  <path d="M68 114h184M62 148h196M58 182h204" stroke="#fed7aa" stroke-width="8" stroke-linecap="round"/>
+  <path d="M86 192v-42c0-24 34-24 34 0v42M143 192v-48c0-25 34-25 34 0v48M200 192v-42c0-24 34-24 34 0v42" fill="#fff7ed"/>
+  <path d="M72 104c42-28 134-28 176 0" fill="none" stroke="#9a3412" stroke-width="10" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-labelledby="title">
+  <title id="title">Taj Mahal avatar</title>
+  <rect width="320" height="240" rx="28" fill="#fff7ed"/>
+  <path d="M36 202c38-18 78-22 120-12s84 8 128-12v62H36z" fill="#fed7aa"/>
+  <path d="M74 104h36v92H74zM210 104h36v92h-36z" fill="#fb923c"/>
+  <path d="M104 102h112v94H104z" fill="#f97316"/>
+  <path d="M108 104c8-54 96-54 104 0z" fill="#ffedd5"/>
+  <path d="M160 42v28" stroke="#9a3412" stroke-width="8" stroke-linecap="round"/>
+  <path d="M92 132v64M134 132v64M186 132v64M228 132v64" stroke="#fff7ed" stroke-width="10" stroke-linecap="round"/>
+  <path d="M64 196h192" stroke="#9a3412" stroke-width="10" stroke-linecap="round"/>
+</svg>

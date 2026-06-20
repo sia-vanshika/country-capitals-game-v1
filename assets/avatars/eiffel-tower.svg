@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-labelledby="title">
+  <title id="title">Eiffel Tower avatar</title>
+  <rect width="320" height="240" rx="28" fill="#dbeafe"/>
+  <circle cx="258" cy="44" r="42" fill="#fef3c7"/>
+  <path d="M36 198c40-26 82-34 126-20s82 8 122-18v80H36z" fill="#bfdbfe"/>
+  <path d="M160 30l-54 172h108z" fill="#1d4ed8"/>
+  <path d="M160 30l34 172M160 30l-34 172M119 103h82M105 152h110M92 202h136" fill="none" stroke="#eff6ff" stroke-width="8" stroke-linecap="round"/>
+  <path d="M130 202l30-88 30 88" fill="none" stroke="#93c5fd" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

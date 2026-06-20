@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-labelledby="title">
+  <title id="title">Neuschwanstein Castle avatar</title>
+  <rect width="320" height="240" rx="28" fill="#f0f9ff"/>
+  <path d="M36 198c44-28 88-32 132-18s78 10 116-18v78H36z" fill="#bae6fd"/>
+  <path d="M72 104h40v92H72zM208 94h42v102h-42zM118 124h92v72h-92z" fill="#0f766e"/>
+  <path d="M62 104l30-46 30 46zM198 94l31-50 31 50zM130 124l34-48 34 48z" fill="#1d4ed8"/>
+  <path d="M94 146v50M142 156v40M186 156v40M230 140v56" stroke="#f0f9ff" stroke-width="10" stroke-linecap="round"/>
+  <path d="M58 196h210" stroke="#0f766e" stroke-width="10" stroke-linecap="round"/>
+</svg>
