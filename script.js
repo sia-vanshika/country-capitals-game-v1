@@ -8,9 +8,12 @@ const gameSection = document.querySelector("#game-section");
 const existingProfileButton = document.querySelector("#existing-profile-button");
 const makeProfileButton = document.querySelector("#make-profile-button");
 const guestButton = document.querySelector("#guest-button");
+const aboutButton = document.querySelector("#about-button");
 const homeOptionsView = document.querySelector(".home-options-view");
 
 // Find the saved-profile and make-profile panels.
+const aboutCreatorSignature = document.querySelector("#about-creator-signature");
+const aboutSection = document.querySelector("#about-section");
 const existingProfileSection = document.querySelector("#existing-profile-section");
 const makeProfileSection = document.querySelector("#make-profile-section");
 const existingProfileList = document.querySelector("#existing-profile-list");
@@ -22,6 +25,7 @@ const confirmDeleteProfileButton = document.querySelector("#confirm-delete-profi
 const profileNameInput = document.querySelector("#profile-name-input");
 const createProfileButton = document.querySelector("#create-profile-button");
 const createProfileMessage = document.querySelector("#create-profile-message");
+const backToWelcomeFromAbout = document.querySelector("#back-to-welcome-from-about");
 const backToWelcomeFromExisting = document.querySelector("#back-to-welcome-from-existing");
 const backToWelcomeFromCreate = document.querySelector("#back-to-welcome-from-create");
 const avatarSection = document.querySelector("#avatar-section");
@@ -1260,12 +1264,22 @@ function showWelcomeOptions() {
   // The main home screen is the welcome title, helper text, and three option buttons.
   // Showing it again replaces any profile sub-screen.
   homeOptionsView.classList.remove("hidden");
+  aboutCreatorSignature.classList.add("hidden");
+  aboutSection.classList.add("hidden");
   existingProfileSection.classList.add("hidden");
   makeProfileSection.classList.add("hidden");
   avatarSection.classList.add("hidden");
   deleteProfileDialog.classList.add("hidden");
   profileIndexToDelete = null;
   createProfileMessage.textContent = "";
+}
+
+// This shows app information from the first welcome screen.
+function showAboutScreen() {
+  showWelcomeOptions();
+  homeOptionsView.classList.add("hidden");
+  aboutCreatorSignature.classList.remove("hidden");
+  aboutSection.classList.remove("hidden");
 }
 
 // This shows saved profiles so the player can load one.
@@ -2460,6 +2474,11 @@ guestButton.addEventListener("click", function () {
   startGuestMode();
 });
 
+// Show app details from the welcome screen.
+aboutButton.addEventListener("click", function () {
+  showAboutScreen();
+});
+
 // Create a saved profile from the typed name.
 createProfileButton.addEventListener("click", function () {
   createProfile();
@@ -2475,6 +2494,11 @@ profileNameInput.addEventListener("keydown", function (event) {
 // The Back button on the profile screen returns to the main home screen.
 // showWelcomeOptions() hides the profile screen and shows the three home choices again.
 backToWelcomeFromExisting.addEventListener("click", function () {
+  showWelcomeOptions();
+});
+
+// The Back button on the About screen returns to the same home choices.
+backToWelcomeFromAbout.addEventListener("click", function () {
   showWelcomeOptions();
 });
 
