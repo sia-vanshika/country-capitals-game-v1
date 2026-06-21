@@ -316,7 +316,7 @@ h1 {
   margin-top: 6px;
 }
 
-/* This positions the coin badge, Sound toggle, and Store button together in the top-right corner. */
+/* This positions the coin badge and Store button together in the top-right corner. */
 /* position: fixed keeps both game rewards visible while the player changes screens. */
 .top-game-bar {
   position: fixed;
@@ -344,40 +344,6 @@ h1 {
   box-shadow: 0 8px 18px rgba(180, 83, 9, 0.18);
   font-size: 1.1rem;
   font-weight: 700;
-}
-
-/* This toggle lets each profile choose whether answer sounds should play. */
-#sound-toggle-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  margin: 0;
-  padding: 9px 14px;
-  color: #1d4ed8;
-  background-color: #eff6ff;
-  border: 2px solid #bfdbfe;
-  border-radius: 999px;
-  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.14);
-  font-size: 1rem;
-  font-weight: 700;
-  white-space: nowrap;
-  cursor: pointer;
-}
-
-#sound-toggle-button:hover {
-  background-color: #dbeafe;
-}
-
-#sound-toggle-button[aria-pressed="false"] {
-  color: #64748b;
-  background-color: #f8fafc;
-  border-color: #cbd5e1;
-  box-shadow: 0 8px 18px rgba(100, 116, 139, 0.12);
-}
-
-#sound-toggle-button.hidden {
-  display: none;
 }
 
 /* This styles the welcome message. */
@@ -1931,23 +1897,28 @@ label {
 .answer-confetti-piece {
   position: absolute;
   left: 50%;
-  top: 28%;
-  width: 7px;
-  height: 10px;
-  border-radius: 3px;
+  top: 38%;
+  width: 10px;
+  height: 14px;
+  border-radius: 4px;
   opacity: 0;
-  animation: answer-confetti-burst 0.72s ease-out forwards;
+  will-change: transform, opacity;
+  animation: answer-confetti-burst 1.08s ease-out forwards;
 }
 
 @keyframes answer-confetti-burst {
   0% {
     opacity: 1;
-    transform: translate(0, 0) rotate(0deg) scale(0.9);
+    transform: translate(0, 0) rotate(0deg) scale(1.15);
+  }
+
+  72% {
+    opacity: 1;
   }
 
   100% {
     opacity: 0;
-    transform: translate(var(--answer-confetti-x), var(--answer-confetti-y)) rotate(var(--answer-confetti-rotation)) scale(1);
+    transform: translate(var(--answer-confetti-x), var(--answer-confetti-y)) rotate(var(--answer-confetti-rotation)) scale(0.92);
   }
 }
 
@@ -2178,12 +2149,6 @@ label {
     min-width: 66px;
     padding: 7px 10px;
     font-size: 0.96rem;
-  }
-
-  #sound-toggle-button {
-    min-height: 40px;
-    padding: 7px 10px;
-    font-size: 0.9rem;
   }
 
   #store-button {
