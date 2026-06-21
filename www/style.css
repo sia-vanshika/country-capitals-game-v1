@@ -8,6 +8,10 @@ body {
   margin: 0;
   min-height: 100vh;
   padding: 18px;
+  padding-top: max(18px, env(safe-area-inset-top));
+  padding-right: max(18px, env(safe-area-inset-right));
+  padding-bottom: max(18px, env(safe-area-inset-bottom));
+  padding-left: max(18px, env(safe-area-inset-left));
   color: #1f2937;
   /* This gradient fills the whole screen with soft pastel colors. */
   /* The first color is soft teal for the top-left corner. */
@@ -312,12 +316,12 @@ h1 {
   margin-top: 6px;
 }
 
-/* This positions the coin badge and Store button together in the top-right corner. */
+/* This positions the coin badge, Sound toggle, and Store button together in the top-right corner. */
 /* position: fixed keeps both game rewards visible while the player changes screens. */
 .top-game-bar {
   position: fixed;
-  top: 16px;
-  right: 16px;
+  top: max(16px, env(safe-area-inset-top));
+  right: max(16px, env(safe-area-inset-right));
   z-index: 10;
   display: flex;
   align-items: center;
@@ -340,6 +344,40 @@ h1 {
   box-shadow: 0 8px 18px rgba(180, 83, 9, 0.18);
   font-size: 1.1rem;
   font-weight: 700;
+}
+
+/* This toggle lets each profile choose whether answer sounds should play. */
+#sound-toggle-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  margin: 0;
+  padding: 9px 14px;
+  color: #1d4ed8;
+  background-color: #eff6ff;
+  border: 2px solid #bfdbfe;
+  border-radius: 999px;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.14);
+  font-size: 1rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+#sound-toggle-button:hover {
+  background-color: #dbeafe;
+}
+
+#sound-toggle-button[aria-pressed="false"] {
+  color: #64748b;
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
+  box-shadow: 0 8px 18px rgba(100, 116, 139, 0.12);
+}
+
+#sound-toggle-button.hidden {
+  display: none;
 }
 
 /* This styles the welcome message. */
@@ -1232,8 +1270,8 @@ label {
 /* This World Map pill sits in the top-left, opposite the coin and Store controls. */
 #world-map-button {
   position: fixed;
-  top: 16px;
-  left: 16px;
+  top: max(16px, env(safe-area-inset-top));
+  left: max(16px, env(safe-area-inset-left));
   z-index: 10;
   display: inline-flex;
   align-items: center;
@@ -1877,6 +1915,42 @@ label {
   background-color: #0f5f59;
 }
 
+/* This small burst appears after a normal correct quiz answer. */
+.answer-confetti {
+  position: fixed;
+  inset: 0;
+  z-index: 18;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.answer-confetti.hidden {
+  display: none;
+}
+
+.answer-confetti-piece {
+  position: absolute;
+  left: 50%;
+  top: 28%;
+  width: 7px;
+  height: 10px;
+  border-radius: 3px;
+  opacity: 0;
+  animation: answer-confetti-burst 0.72s ease-out forwards;
+}
+
+@keyframes answer-confetti-burst {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg) scale(0.9);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(var(--answer-confetti-x), var(--answer-confetti-y)) rotate(var(--answer-confetti-rotation)) scale(1);
+  }
+}
+
 /* This overlay appears briefly when a country becomes mastered. */
 .mastery-celebration {
   position: fixed;
@@ -2092,8 +2166,11 @@ label {
 @media (max-width: 480px) {
   /* On small screens, the top game bar tightens its spacing so both pills fit. */
   .top-game-bar {
-    top: 10px;
-    right: 10px;
+    top: calc(58px + env(safe-area-inset-top));
+    right: max(10px, env(safe-area-inset-right));
+    left: max(10px, env(safe-area-inset-left));
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 6px;
   }
 
@@ -2101,6 +2178,12 @@ label {
     min-width: 66px;
     padding: 7px 10px;
     font-size: 0.96rem;
+  }
+
+  #sound-toggle-button {
+    min-height: 40px;
+    padding: 7px 10px;
+    font-size: 0.9rem;
   }
 
   #store-button {
@@ -2111,8 +2194,8 @@ label {
 
   /* The World Map pill also shrinks a little so it fits opposite the coin and Store row. */
   #world-map-button {
-    top: 10px;
-    left: 10px;
+    top: max(10px, env(safe-area-inset-top));
+    left: max(10px, env(safe-area-inset-left));
     min-height: 40px;
     padding: 7px 10px;
     font-size: 0.94rem;
@@ -2272,5 +2355,51 @@ label {
     top: 74%;
     right: 3%;
     width: 66px;
+  }
+}
+
+/* ===== Startup Screen ===== */
+
+#startup-screen {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(180deg,#0B3D91,#1A73E8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  color: white;
+  text-align: center;
+}
+
+.startup-content {
+  animation: startupFade 1s ease;
+}
+
+.startup-globe {
+  font-size: 90px;
+  margin-bottom: 20px;
+}
+
+.startup-author {
+  font-size: 20px;
+  opacity: .9;
+}
+
+.startup-tagline {
+  margin-top: 25px;
+  color: #FFD54F;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+@keyframes startupFade {
+  from {
+    opacity: 0;
+    transform: scale(.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }

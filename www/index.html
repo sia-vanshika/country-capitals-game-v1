@@ -2,12 +2,28 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Country Capitals Game</title>
 
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Startup welcome screen -->
+  <section id="startup-screen">
+    <div class="startup-content">
+      <div class="startup-globe">🌎</div>
+
+      <h1>Country Capitals Game</h1>
+
+      <p class="startup-author">
+        Created by Vanshika, Age 11
+      </p>
+
+      <p class="startup-tagline">
+        Explore the World!
+      </p>
+    </div>
+  </section>
   <!-- These decorations are only for the travel theme, so screen readers can ignore them. -->
   <div class="travel-decorations" aria-hidden="true">
     <!-- Dashed routes add a soft map-and-flight feeling near the page edges. -->
@@ -127,6 +143,7 @@
     <!-- This top game bar keeps the coin counter and Store button beside each other. -->
     <div class="top-game-bar">
       <p id="coin-count" aria-label="Coins">&#129689; 0</p>
+      <button id="sound-toggle-button" class="sound-toggle-button hidden" type="button" aria-pressed="true">&#128266; Sound On</button>
       <button id="store-button" class="hidden" type="button">&#127978; Store</button>
     </div>
 
@@ -377,6 +394,9 @@
       </section>
     </section>
   </main>
+
+  <!-- This smaller burst appears after any correct quiz answer. -->
+  <div id="answer-confetti" class="answer-confetti hidden" aria-hidden="true"></div>
 
   <!-- This short celebration appears when a country is mastered. -->
   <section id="mastery-celebration" class="mastery-celebration hidden" aria-live="polite">

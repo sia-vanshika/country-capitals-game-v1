@@ -65,6 +65,7 @@ const masterListButton = document.querySelector("#master-list-button");
 const practiceButton = document.querySelector("#practice-button");
 
 // Find the Store button and Store screen parts.
+const soundToggleButton = document.querySelector("#sound-toggle-button");
 const storeButton = document.querySelector("#store-button");
 const storeSection = document.querySelector("#store-section");
 const storeBalance = document.querySelector("#store-balance");
@@ -109,9 +110,17 @@ const practiceQuestion = document.querySelector("#practice-question");
 const answerChoices = document.querySelector("#answer-choices");
 const practiceFeedback = document.querySelector("#practice-feedback");
 const nextQuestionButton = document.querySelector("#next-question-button");
+const answerConfetti = document.querySelector("#answer-confetti");
 
 // This local JSON file is the app's source of truth, so country learning can work offline.
 const localCountryDataUrl = "countries.json";
+
+// These small local sound files are bundled with the app, so answer sounds work offline.
+const correctAnswerSoundUrl = "assets/audio/correct-answer.wav";
+const wrongAnswerSoundUrl = "assets/audio/wrong-answer.wav";
+
+// Answer sounds stay gentle so they do not overpower the mastery THUMP.
+const answerSoundVolume = 0.45;
 
 // This friendly message appears if the bundled local data cannot load.
 const countryDataLoadErrorMessage = "Country data could not load right now. Please refresh the app and try again.";
@@ -249,6 +258,9 @@ const masteryBonusCoins = 5;
 // This keeps the celebration under 2 seconds.
 const masteryCelebrationDuration = 1800;
 
+// This keeps the small correct-answer confetti quick and lightweight.
+const answerConfettiDuration = 900;
+
 // This list holds the currently loaded country records from countries.json.
 let countryCapitalList = [];
 
@@ -324,11 +336,138 @@ const storePurchases = [];
 // This number stores the coins earned by the selected profile.
 let coins = 0;
 
+// This stores whether the current profile wants answer sounds on or off.
+let soundEnabled = true;
+
 // This stores the current Practice Mode question.
 let currentPracticeCountry = null;
 
 // This stores the timer that hides the mastery celebration.
 let masteryCelebrationTimer = null;
+
+// This stores the timer that clears the smaller correct-answer confetti.
+let answerConfettiTimer = null;
+
+// These audio objects are reused for every answer click instead of being recreated.
+const correctAnswerSound = createReusableAnswerSound(correctAnswerSoundUrl);
+const wrongAnswerSound = createReusableAnswerSound(wrongAnswerSoundUrl);
+
+// This creates one reusable audio object for a bundled local sound file.
+function createReusableAnswerSound(soundUrl) {
+  if (typeof Audio === "undefined") {
+    return null;
+  }
+
+  const sound = new Audio(soundUrl);
+  sound.preload = "auto";
+  sound.volume = answerSoundVolume;
+  return sound;
+}
+
+// This keeps the Sound button text matched to the current profile setting.
+function updateSoundToggleDisplay() {
+  if (!soundToggleButton) {
+    return;
+  }
+
+  if (soundEnabled) {
+    soundToggleButton.textContent = "\uD83D\uDD0A Sound On";
+    soundToggleButton.setAttribute("aria-pressed", "true");
+    soundToggleButton.setAttribute("aria-label", "Turn answer sounds off");
+  } else {
+    soundToggleButton.textContent = "\uD83D\uDD07 Sound Off";
+    soundToggleButton.setAttribute("aria-pressed", "false");
+    soundToggleButton.setAttribute("aria-label", "Turn answer sounds on");
+  }
+}
+
+// This turns sound on or off for the current profile and saves the choice.
+function toggleSoundPreference() {
+  soundEnabled = !soundEnabled;
+  updateSoundToggleDisplay();
+  saveProgress();
+}
+
+// This plays a reused sound from the beginning each time an answer is clicked.
+function playReusableAnswerSound(sound) {
+  if (!soundEnabled || sound === null) {
+    return;
+  }
+
+  try {
+    sound.pause();
+    sound.currentTime = 0;
+
+    const playPromise = sound.play();
+
+    if (playPromise && typeof playPromise.catch === "function") {
+      playPromise.catch(function () {
+        // If the device blocks audio, keep the quiz moving without an error.
+      });
+    }
+  } catch (error) {
+    // If sound cannot play, the quiz should still continue normally.
+  }
+}
+
+// This builds a small colorful burst after a correct answer.
+function showAnswerConfetti() {
+  if (!answerConfetti) {
+    return;
+  }
+
+  const confettiColors = ["#2563eb", "#14b8a6", "#facc15", "#fb7185", "#22c55e"];
+
+  hideAnswerConfetti();
+
+  answerConfetti.innerHTML = "";
+
+  for (let index = 0; index < 10; index = index + 1) {
+    const confettiPiece = document.createElement("span");
+    confettiPiece.classList.add("answer-confetti-piece");
+    confettiPiece.style.backgroundColor = confettiColors[index % confettiColors.length];
+    confettiPiece.style.setProperty("--answer-confetti-x", (Math.random() * 130 - 65) + "px");
+    confettiPiece.style.setProperty("--answer-confetti-y", (Math.random() * 95 - 115) + "px");
+    confettiPiece.style.setProperty("--answer-confetti-rotation", (Math.random() * 260 - 130) + "deg");
+    answerConfetti.appendChild(confettiPiece);
+  }
+
+  answerConfetti.classList.add("hidden");
+  answerConfetti.offsetWidth;
+  answerConfetti.classList.remove("hidden");
+
+  answerConfettiTimer = setTimeout(function () {
+    answerConfetti.classList.add("hidden");
+    answerConfetti.innerHTML = "";
+  }, answerConfettiDuration);
+}
+
+// This clears any old small burst before a wrong answer can show stale confetti.
+function hideAnswerConfetti() {
+  if (!answerConfetti) {
+    return;
+  }
+
+  if (answerConfettiTimer !== null) {
+    clearTimeout(answerConfettiTimer);
+    answerConfettiTimer = null;
+  }
+
+  answerConfetti.classList.add("hidden");
+  answerConfetti.innerHTML = "";
+}
+
+// Correct answers get both a chime and a small burst.
+function playCorrectAnswerEffects() {
+  playReusableAnswerSound(correctAnswerSound);
+  showAnswerConfetti();
+}
+
+// Wrong answers get a different sound but no confetti.
+function playWrongAnswerEffects() {
+  playReusableAnswerSound(wrongAnswerSound);
+  hideAnswerConfetti();
+}
 
 // This updates the always-visible coin badge.
 // The emoji makes it feel like a game reward, and the number shows saved coins.
@@ -791,6 +930,7 @@ function createEmptyProfile(profileName) {
   return {
     name: profileName || "",
     avatar: defaultAvatarId,
+    soundEnabled: true,
     coins: 0,
     masterCountries: [],
     masterCountryData: [],
@@ -869,6 +1009,10 @@ function cleanProfile(profile) {
 
   if (typeof profile.avatar === "string") {
     cleanData.avatar = findLandmarkAvatar(profile.avatar).id;
+  }
+
+  if (typeof profile.soundEnabled === "boolean") {
+    cleanData.soundEnabled = profile.soundEnabled;
   }
 
   if (Array.isArray(profile.masterCountries)) {
@@ -970,6 +1114,7 @@ function moveOldProgressToFirstProfile() {
     profiles[0] = {
       name: "Profile 1",
       avatar: defaultAvatarId,
+      soundEnabled: true,
       coins: Number.isNaN(oldCoins) ? 0 : oldCoins,
       masterCountries: oldCountries,
       masterCountryData: oldCountryData,
@@ -1029,6 +1174,7 @@ function clearCurrentProfileData() {
   masterCountries.length = 0;
   masterCountryData.length = 0;
   coins = 0;
+  soundEnabled = true;
 
   Object.keys(countryStatuses).forEach(function (country) {
     delete countryStatuses[country];
@@ -1080,6 +1226,8 @@ function loadSelectedProfile(profileIndex) {
 
   coins = profile.coins;
   updateCoinDisplay();
+  soundEnabled = profile.soundEnabled;
+  updateSoundToggleDisplay();
 }
 
 // This saves the current player's progress back into their profile.
@@ -1093,6 +1241,7 @@ function saveProgress() {
   profiles[selectedProfileIndex] = {
     name: profiles[selectedProfileIndex].name,
     avatar: profiles[selectedProfileIndex].avatar,
+    soundEnabled: soundEnabled,
     coins: coins,
     masterCountries: masterCountries.slice(),
     masterCountryData: masterCountryData.slice(),
@@ -1151,6 +1300,7 @@ function showAvatarSelection(mode, selectedAvatarId) {
   avatarMessage.textContent = "";
   profileSection.classList.remove("hidden");
   gameSection.classList.add("hidden");
+  soundToggleButton.classList.add("hidden");
   storeButton.classList.add("hidden");
   worldMapButton.classList.add("hidden");
 
@@ -1181,6 +1331,7 @@ function returnToGameFromAvatarSettings() {
   avatarSection.classList.add("hidden");
   profileSection.classList.add("hidden");
   gameSection.classList.remove("hidden");
+  soundToggleButton.classList.remove("hidden");
   storeButton.classList.remove("hidden");
   worldMapButton.classList.remove("hidden");
   updateProfileAvatarDisplay();
@@ -1431,6 +1582,7 @@ function showGameForSelectedProfile() {
   selectedContinent = "";
   updateActiveContinentButton(selectedContinent);
   updateCoinDisplay();
+  updateSoundToggleDisplay();
   practiceButtonMode = "newCountries";
   previousCountriesButtonMode = "openPreviousCountries";
   updateProfileActionButtons();
@@ -1440,6 +1592,7 @@ function showGameForSelectedProfile() {
   // Previous Countries shows "(0)" when this profile has not learned countries yet.
   masterListButton.classList.remove("hidden");
   practiceButton.classList.remove("hidden");
+  soundToggleButton.classList.remove("hidden");
   storeButton.classList.remove("hidden");
   worldMapButton.classList.remove("hidden");
   profileHomeBackButton.classList.remove("hidden");
@@ -1451,6 +1604,7 @@ function returnToProfileChoices() {
   gameSection.classList.add("hidden");
   profileSection.classList.remove("hidden");
   profileHomeBackButton.classList.add("hidden");
+  soundToggleButton.classList.add("hidden");
   storeButton.classList.add("hidden");
   worldMapButton.classList.add("hidden");
   showWelcomeOptions();
@@ -1748,6 +1902,7 @@ function checkNewCountriesQuizAnswer(selectedCapital, correctCapital) {
   });
 
   if (selectedCapital === correctCapital) {
+    playCorrectAnswerEffects();
     addCountryToMasterList(currentNewCountriesQuizItem);
 
     newCountriesQuizPool = newCountriesQuizPool.filter(function (item) {
@@ -1756,6 +1911,7 @@ function checkNewCountriesQuizAnswer(selectedCapital, correctCapital) {
 
     practiceFeedback.textContent = "Correct! " + currentNewCountriesQuizItem.country + " was added to your learned countries.";
   } else {
+    playWrongAnswerEffects();
     practiceFeedback.textContent = "Not quite. The correct answer is " + correctCapital + ".";
   }
 
@@ -2323,6 +2479,8 @@ function checkPracticeAnswer(selectedCapital, correctCapital) {
   });
 
   if (selectedCapital === correctCapital) {
+    playCorrectAnswerEffects();
+
     // Add 1 coin when the answer is correct.
     const answerCoinReward = 1;
     coins = coins + answerCoinReward;
@@ -2345,6 +2503,8 @@ function checkPracticeAnswer(selectedCapital, correctCapital) {
 
     practiceFeedback.textContent = "Correct! You earned " + answerCoinReward + (answerCoinReward === 1 ? " coin." : " coins.");
   } else {
+    playWrongAnswerEffects();
+
     // Save this country as incorrect for the Master List status.
     updateCountryStatus(currentPracticeCountry, "incorrect");
 
@@ -2452,6 +2612,7 @@ async function showContinentCountries(continentName) {
 // Restore all saved profiles when the page loads.
 loadProfilesFromStorage();
 updateCoinDisplay();
+updateSoundToggleDisplay();
 updateProfileActionButtons();
 
 // Keep the game locked until the user chooses a profile.
@@ -2472,6 +2633,11 @@ makeProfileButton.addEventListener("click", function () {
 // Guest mode enters the game without saving progress permanently.
 guestButton.addEventListener("click", function () {
   startGuestMode();
+});
+
+// This button saves answer sound preference inside the current profile.
+soundToggleButton.addEventListener("click", function () {
+  toggleSoundPreference();
 });
 
 // Show app details from the welcome screen.
