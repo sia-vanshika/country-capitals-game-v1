@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-labelledby="title">
+  <title id="title">Sydney Opera House avatar</title>
+  <rect width="320" height="240" rx="28" fill="#e0f2fe"/>
+  <path d="M34 190c46 18 76 16 122 4s78-16 130 4v42H34z" fill="#38bdf8"/>
+  <path d="M58 184h208" stroke="#0369a1" stroke-width="12" stroke-linecap="round"/>
+  <path d="M68 180C92 94 132 56 160 178z" fill="#f8fafc" stroke="#0284c7" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M128 180C154 72 212 54 244 178z" fill="#ffffff" stroke="#0284c7" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M198 180c20-58 50-78 76-2z" fill="#f8fafc" stroke="#0284c7" stroke-width="8" stroke-linejoin="round"/>
+</svg>

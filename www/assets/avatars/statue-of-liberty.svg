@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-labelledby="title">
+  <title id="title">Statue of Liberty avatar</title>
+  <rect width="320" height="240" rx="28" fill="#ccfbf1"/>
+  <path d="M40 198c58-18 98-12 132-4s62 8 108-14v60H40z" fill="#99f6e4"/>
+  <path d="M140 92h42l10 94h-62z" fill="#0f766e"/>
+  <path d="M126 186h80v24h-80z" fill="#115e59"/>
+  <path d="M132 84l12-32 16 26 16-26 12 32z" fill="#14b8a6"/>
+  <path d="M182 104l46-46" stroke="#0f766e" stroke-width="14" stroke-linecap="round"/>
+  <path d="M232 45l8-28 12 28z" fill="#f59e0b"/>
+  <circle cx="160" cy="92" r="18" fill="#f0fdfa"/>
+</svg>

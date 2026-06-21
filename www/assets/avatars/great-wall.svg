@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-labelledby="title">
+  <title id="title">Great Wall of China avatar</title>
+  <rect width="320" height="240" rx="28" fill="#fee2e2"/>
+  <path d="M36 202c44-44 82-46 124-20s78 22 124-26v84H36z" fill="#fecaca"/>
+  <path d="M50 166l62-30 58 22 54-36 50 18v58H50z" fill="#be123c"/>
+  <path d="M68 154v-28h44v28M188 138v-32h44v32" fill="#7f1d1d"/>
+  <path d="M64 166h210M88 188h168M118 146v50M160 154v48M206 132v66M246 142v56" stroke="#fecaca" stroke-width="8" stroke-linecap="round"/>
+</svg>

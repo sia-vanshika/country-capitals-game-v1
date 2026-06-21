@@ -1,0 +1,2276 @@
+﻿/* This makes sizing easier to understand. */
+* {
+  box-sizing: border-box;
+}
+
+/* This styles the whole page. */
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding: 18px;
+  color: #1f2937;
+  /* This gradient fills the whole screen with soft pastel colors. */
+  /* The first color is soft teal for the top-left corner. */
+  /* The middle color is pastel blue for a calm, friendly look. */
+  /* The last color is soft peach-pink for the bottom-right corner. */
+  background: linear-gradient(135deg, #8FD3D8 0%, #CFE8FF 50%, #F4B8A8 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* This full-page layer holds the faded travel decorations. */
+/* pointer-events: none means the decorations never block buttons or flashcards. */
+.travel-decorations {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* These shared styles keep decorative items near the page edges and subtle. */
+.travel-decor {
+  position: absolute;
+  user-select: none;
+}
+
+/* Dashed airplane routes add movement without covering the main card. */
+.route {
+  position: absolute;
+  width: 320px;
+  height: auto;
+  fill: none;
+  stroke: #2563eb;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 8 10;
+  opacity: 0.18;
+}
+
+.route-top {
+  top: 5%;
+  left: 14%;
+  transform: rotate(-5deg);
+}
+
+.route-bottom {
+  right: 12%;
+  bottom: 4%;
+  stroke: #be123c;
+  transform: rotate(4deg);
+}
+
+/* Passport stamps use soft ink colors and a dashed border. */
+.stamp {
+  padding: 6px 10px;
+  color: #1d4ed8;
+  background-color: rgba(239, 246, 255, 0.44);
+  border: 2px dashed #1d4ed8;
+  border-radius: 8px;
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.08);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  opacity: 0.26;
+}
+
+.stamp-one {
+  top: 9%;
+  left: 4%;
+  transform: rotate(-12deg);
+}
+
+.stamp-two {
+  right: 6%;
+  bottom: 11%;
+  color: #be123c;
+  border-color: #be123c;
+  background-color: rgba(255, 241, 242, 0.44);
+  transform: rotate(10deg);
+}
+
+/* Travel sticker SVGs have soft paper fills and simple ink-like details. */
+.sticker {
+  width: 54px;
+  height: 54px;
+  opacity: 0.23;
+  filter: drop-shadow(0 5px 8px rgba(31, 41, 55, 0.08));
+}
+
+.sticker-paper {
+  fill: #fff7ed;
+  stroke: #fed7aa;
+  stroke-width: 3;
+}
+
+.sticker-detail {
+  fill: none;
+  stroke: #1d4ed8;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.globe-icon .sticker-paper {
+  fill: #eff6ff;
+  stroke: #bfdbfe;
+}
+
+.globe-icon .sticker-detail {
+  stroke: #0f766e;
+  stroke-width: 2.6;
+}
+
+.compass-icon .sticker-paper {
+  fill: #f0fdfa;
+  stroke: #99f6e4;
+}
+
+.compass-icon .sticker-detail {
+  stroke: #be123c;
+  stroke-width: 2.8;
+}
+
+.sticker-plane {
+  top: 19%;
+  right: 10%;
+  transform: rotate(14deg);
+}
+
+.sticker-bag {
+  bottom: 24%;
+  left: 5%;
+  transform: rotate(-8deg);
+}
+
+.globe-icon {
+  bottom: 5%;
+  left: 14%;
+}
+
+.compass-icon {
+  right: 11%;
+  bottom: 28%;
+  transform: rotate(-10deg);
+}
+
+/* Small SVG flag graphics replace emoji flags and look more like real flags. */
+.flag-image {
+  width: 48px;
+  height: auto;
+  opacity: 0.35;
+  border-radius: 8px;
+  box-shadow: 0 5px 12px rgba(31, 41, 55, 0.12);
+  outline: 3px solid rgba(255, 255, 255, 0.45);
+}
+
+.flag-france {
+  top: 31%;
+  left: 3%;
+  transform: rotate(-6deg);
+}
+
+.flag-japan {
+  top: 8%;
+  right: 30%;
+  transform: rotate(8deg);
+}
+
+.flag-india {
+  right: 5%;
+  bottom: 20%;
+  transform: rotate(-7deg);
+}
+
+.flag-brazil {
+  right: 5%;
+  top: 43%;
+  transform: rotate(7deg);
+}
+
+.flag-kenya {
+  left: 9%;
+  bottom: 18%;
+  transform: rotate(9deg);
+}
+
+.flag-australia {
+  right: 25%;
+  bottom: 6%;
+  transform: rotate(-8deg);
+}
+
+/* Landmark stickers are still subtle, but use fills and white outlines for polish. */
+.landmark {
+  position: absolute;
+  width: 88px;
+  height: auto;
+  color: #0f766e;
+  opacity: 0.19;
+  filter: drop-shadow(0 6px 10px rgba(31, 41, 55, 0.08));
+}
+
+.landmark-sticker {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.82);
+  stroke-width: 12;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.landmark-fill {
+  fill: currentColor;
+}
+
+.landmark-line {
+  fill: none;
+  stroke: #334155;
+  stroke-width: 3.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.5;
+}
+
+.landmark-eiffel {
+  right: 17%;
+  bottom: 3%;
+}
+
+.landmark-liberty {
+  top: 7%;
+  left: 17%;
+  color: #1d4ed8;
+}
+
+.landmark-taj {
+  left: 25%;
+  bottom: 5%;
+  width: 108px;
+  color: #0f766e;
+}
+
+.landmark-colosseum {
+  top: 66%;
+  left: 2%;
+  width: 104px;
+  color: #b45309;
+}
+
+.landmark-opera {
+  top: 47%;
+  right: 2%;
+  width: 106px;
+  color: #be123c;
+}
+
+/* This uses only local/system fonts so the app can run offline. */
+body,
+button {
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  font-weight: 400;
+}
+
+/* This styles the white card in the middle. */
+.game-card {
+  position: relative;
+  z-index: 1;
+  /* A slimmer width makes the home screen feel more like a phone app screen. */
+  width: min(100%, 360px);
+  padding: 28px 24px;
+  text-align: center;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+  /* Long words and messages can wrap instead of pushing outside the card. */
+  overflow-wrap: anywhere;
+}
+
+/* This styles the main title. */
+h1 {
+  margin: 0;
+  color: #2563eb;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+/* This subtle creator signature keeps the welcome screen personal without overpowering the game title. */
+.creator-signature {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.86rem;
+  font-weight: 400;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.welcome-creator-signature {
+  margin-top: 10px;
+}
+
+.about-creator-signature {
+  margin-top: 6px;
+}
+
+/* This positions the coin badge and Store button together in the top-right corner. */
+/* position: fixed keeps both game rewards visible while the player changes screens. */
+.top-game-bar {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* This keeps the coin counter as a small rounded badge. */
+#coin-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 74px;
+  margin: 0;
+  padding: 8px 14px;
+  color: #b45309;
+  background-color: #fff7ed;
+  border: 2px solid #fed7aa;
+  border-radius: 999px;
+  box-shadow: 0 8px 18px rgba(180, 83, 9, 0.18);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+/* This styles the welcome message. */
+p {
+  font-size: 1.1rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+/* This class hides something on the page. */
+.hidden {
+  display: none;
+}
+
+/* This styles the learning section title. */
+h2 {
+  margin-top: 24px;
+  color: #0f766e;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+/* This section holds the profile choices before the game starts. */
+.profile-section {
+  margin-top: 8px;
+}
+
+/* This stacks the three welcome buttons in a centered, app-like column. */
+.welcome-options {
+  display: grid;
+  gap: 12px;
+  width: min(100%, 268px);
+  margin: 18px auto 0;
+}
+
+/* These buttons are narrower than the card but still easy to tap on a phone. */
+.welcome-option {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 72px;
+  padding: 12px 14px;
+  font-size: 1.08rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* The icon is a little larger than the label so each home button feels playful. */
+.welcome-option-icon {
+  flex: 0 0 auto;
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.option-existing {
+  color: #1d4ed8;
+  background-color: #eff6ff;
+  border-color: #bfdbfe;
+}
+
+.option-create {
+  color: #0f766e;
+  background-color: #f0fdfa;
+  border-color: #99f6e4;
+}
+
+.option-guest {
+  color: #be123c;
+  background-color: #fff1f2;
+  border-color: #fecdd3;
+}
+
+/* This gives friendly feedback when the welcome buttons are hovered or focused. */
+.welcome-option:hover,
+.welcome-option:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.16);
+}
+
+/* This small secondary action opens app information from the welcome screen. */
+.about-button {
+  margin-top: 16px;
+  padding: 9px 18px;
+  color: #1d4ed8;
+  background-color: white;
+  border: 2px solid #bfdbfe;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.about-button:hover,
+.about-button:focus-visible {
+  background-color: #eff6ff;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.12);
+}
+
+/* This panel appears when choosing or creating a profile. */
+.profile-choice-panel {
+  margin-top: 20px;
+  padding: 16px;
+  background-color: #f8fafc;
+  border: 2px solid #e0f2fe;
+  border-radius: 8px;
+}
+
+/* This styles the smaller panel title. */
+h3 {
+  margin: 0 0 12px;
+  color: #2563eb;
+  font-size: 1.18rem;
+  font-weight: 700;
+}
+
+/* This keeps the About screen readable inside the same mobile-friendly card. */
+.about-section {
+  text-align: left;
+}
+
+.about-section h3 {
+  text-align: center;
+}
+
+.about-section p {
+  margin: 10px 0;
+  color: #334155;
+  font-size: 1rem;
+}
+
+.about-section h4 {
+  margin: 16px 0 8px;
+  color: #0f766e;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.about-feature-list {
+  display: grid;
+  gap: 7px;
+  margin: 0;
+  padding-left: 22px;
+  color: #1d4ed8;
+  font-weight: 700;
+}
+
+.about-version {
+  color: #be123c;
+  font-weight: 700;
+  text-align: center;
+}
+
+.about-section .small-secondary-button {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* This grid keeps saved profile cards neat and easy to tap. */
+.profile-list {
+  display: grid;
+  gap: 10px;
+}
+
+/* This makes each saved profile look like a large friendly card. */
+.profile-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 68px;
+  padding: 10px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1d4ed8;
+  background-color: #eff6ff;
+  border: 2px solid #bfdbfe;
+  border-radius: 8px;
+}
+
+/* This button loads the profile without touching delete behavior. */
+.profile-select-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-height: 48px;
+  padding: 4px;
+  color: inherit;
+  background: transparent;
+  border: none;
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+.profile-card-avatar {
+  width: 38px;
+  height: 38px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid white;
+  box-shadow: 0 4px 8px rgba(31, 41, 55, 0.12);
+}
+
+/* This delete button is visible, but smaller than the safe profile-select action. */
+.profile-delete-button {
+  padding: 8px 10px;
+  color: #be123c;
+  background-color: #fff1f2;
+  border: 2px solid #fecdd3;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.profile-delete-button:hover,
+.profile-delete-button:focus-visible {
+  background-color: #ffe4e6;
+  border-color: #fb7185;
+}
+
+/* These gentle colors make the profile cards playful without being too bright. */
+.profile-card:nth-child(2) {
+  color: #be123c;
+  background-color: #fff1f2;
+  border-color: #fecdd3;
+}
+
+.profile-card:nth-child(3) {
+  color: #0f766e;
+  background-color: #f0fdfa;
+  border-color: #99f6e4;
+}
+
+.profile-card:nth-child(4) {
+  color: #b45309;
+  background-color: #fff7ed;
+  border-color: #fed7aa;
+}
+
+.profile-card:nth-child(5) {
+  color: #6d28d9;
+  background-color: #f5f3ff;
+  border-color: #ddd6fe;
+}
+
+/* This gives feedback when a profile card is hovered or focused. */
+.profile-card:hover,
+.profile-card:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.18);
+}
+
+/* This confirmation panel appears only after Delete is clicked. */
+.delete-profile-dialog {
+  margin-top: 14px;
+  padding: 14px;
+  color: #1f2937;
+  background-color: #fff1f2;
+  border: 2px solid #fecdd3;
+  border-radius: 8px;
+  box-shadow: 0 10px 22px rgba(190, 18, 60, 0.12);
+}
+
+#delete-profile-name {
+  margin: 0 0 8px;
+  color: #be123c;
+  font-weight: 700;
+}
+
+.delete-warning-list {
+  margin: 8px 0 0;
+  padding-left: 22px;
+  text-align: left;
+  color: #be123c;
+  font-weight: 700;
+}
+
+.delete-dialog-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+#confirm-delete-profile-button {
+  margin-top: 14px;
+  padding: 9px 16px;
+  color: white;
+  background-color: #be123c;
+  border: 2px solid #be123c;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#confirm-delete-profile-button:hover,
+#confirm-delete-profile-button:focus-visible {
+  background-color: #9f1239;
+  border-color: #9f1239;
+}
+
+/* This keeps the profile name label easy to read. */
+label {
+  display: block;
+  margin-bottom: 8px;
+  color: #0f766e;
+  font-weight: 700;
+  text-align: left;
+}
+
+/* This styles the profile name input. */
+#profile-name-input {
+  width: 100%;
+  padding: 12px;
+  color: #1f2937;
+  background-color: white;
+  border: 2px solid #bfdbfe;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+/* This gives the text box a clear focus style. */
+#profile-name-input:focus {
+  outline: 3px solid #bfdbfe;
+  border-color: #2563eb;
+}
+
+/* This styles the button that creates a new profile. */
+#create-profile-button {
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px 18px;
+  color: white;
+  background-color: #16a34a;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#create-profile-button:hover {
+  background-color: #15803d;
+}
+
+/* This styles helpful profile messages. */
+#create-profile-message,
+#no-profiles-message {
+  margin: 12px 0 0;
+  color: #be123c;
+  font-weight: 700;
+}
+
+/* These smaller buttons return to the first welcome choices. */
+.small-secondary-button {
+  margin-top: 14px;
+  padding: 9px 16px;
+  color: #1d4ed8;
+  background-color: white;
+  border: 2px solid #bfdbfe;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.small-secondary-button:hover {
+  background-color: #eff6ff;
+}
+
+/* This short helper text explains the avatar step without crowding the screen. */
+.avatar-help {
+  margin: 0 0 14px;
+  color: #475569;
+  font-size: 1rem;
+}
+
+/* This grid displays the landmark avatar choices as large tappable cards. */
+.avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+/* Each avatar card looks like a small travel postcard. */
+.avatar-card {
+  min-height: 168px;
+  padding: 8px;
+  color: #1f2937;
+  background: linear-gradient(180deg, #ffffff 0%, #eff6ff 100%);
+  border: 2px solid rgba(191, 219, 254, 0.9);
+  border-radius: 8px;
+  box-shadow: 0 8px 18px rgba(31, 41, 55, 0.12);
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.avatar-card:hover,
+.avatar-card:focus-visible {
+  transform: translateY(-3px) rotate(-1deg);
+  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.18);
+}
+
+/* JavaScript adds this class to show the currently selected avatar. */
+.avatar-card.selected {
+  background: linear-gradient(180deg, #ffffff 0%, #dbeafe 100%);
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.16), 0 12px 24px rgba(37, 99, 235, 0.18);
+}
+
+.avatar-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  margin-bottom: 8px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 3px solid white;
+  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.08);
+}
+
+.avatar-name {
+  display: block;
+  min-height: 38px;
+  color: #1d4ed8;
+  font-size: 0.98rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+}
+
+#avatar-message {
+  margin: 12px 0 0;
+  color: #0f766e;
+  font-weight: 700;
+}
+
+/* This badge shows the loaded profile's landmark avatar inside the game. */
+.profile-settings-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  padding: 8px 12px;
+  color: #1d4ed8;
+  background-color: #eff6ff;
+  border: 2px solid #bfdbfe;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.profile-settings-button:hover {
+  background-color: #dbeafe;
+}
+
+/* This keeps the profile settings badge hidden until a saved profile is loaded. */
+.profile-settings-button.hidden {
+  display: none;
+}
+
+.profile-avatar-display {
+  display: inline-flex;
+  width: 32px;
+  height: 32px;
+}
+
+.profile-avatar-display img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 999px;
+  border: 2px solid white;
+}
+
+/* This styles the loading message for bundled country data. */
+#loading-message {
+  color: #2563eb;
+  font-weight: bold;
+}
+
+/* This styles the error message if bundled country data cannot load. */
+#error-message {
+  color: #be123c;
+  font-weight: bold;
+}
+
+/* This holds the continent selector buttons. */
+.continent-picker {
+  display: grid;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+/* Mix and Match is the first full-width choice, while the continent buttons stay grouped below it. */
+.mix-match-button {
+  justify-self: center;
+  width: min(100%, 280px);
+}
+
+/* The OR separator explains that players can choose one mixed set or pick a specific continent. */
+.choice-separator {
+  display: grid;
+  grid-template-columns: minmax(36px, 1fr) auto minmax(36px, 1fr);
+  align-items: center;
+  gap: 10px;
+  width: min(100%, 280px);
+  margin: 2px auto;
+}
+
+/* Subtle lines visually separate Mix and Match from the grouped continent choices without distracting. */
+.choice-separator span {
+  height: 2px;
+  background-color: #bfdbfe;
+  border-radius: 999px;
+  opacity: 0.9;
+}
+
+.choice-separator strong {
+  color: #0f766e;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+/* This keeps the continent-specific options together beneath Mix and Match. */
+.continent-options-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* This styles each continent button. */
+.continent-button {
+  padding: 8px 12px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  color: #1d4ed8;
+  background-color: #eff6ff;
+  border: 2px solid #bfdbfe;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* This shows which continent is selected. */
+.continent-button.active {
+  color: white;
+  background-color: #2563eb;
+  border-color: #2563eb;
+}
+
+/* This changes a continent button when the mouse is over it. */
+.continent-button:hover {
+  background-color: #dbeafe;
+}
+
+.continent-button.active:hover {
+  background-color: #1d4ed8;
+}
+
+/* This second-step panel separates choosing the country set from choosing Quiz or Flash Cards. */
+.new-countries-mode-section {
+  margin-top: 18px;
+  padding: 14px;
+  background-color: #f8fafc;
+  border: 2px solid #e0f2fe;
+  border-radius: 8px;
+}
+
+#new-countries-selection-label {
+  margin: 0 0 12px;
+  color: #475569;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.new-countries-mode-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.new-countries-mode-buttons button,
+#quiz-current-flashcards-button {
+  min-height: 52px;
+  padding: 12px 14px;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+#new-countries-quiz-button {
+  background-color: #2563eb;
+}
+
+#new-countries-quiz-button:hover {
+  background-color: #1d4ed8;
+}
+
+#new-countries-flashcards-button,
+#quiz-current-flashcards-button {
+  background-color: #0f766e;
+}
+
+#new-countries-flashcards-button:hover,
+#quiz-current-flashcards-button:hover {
+  background-color: #0f5f59;
+}
+
+#quiz-current-flashcards-button {
+  width: min(100%, 280px);
+  margin: 14px auto 0;
+}
+
+/* This holds all of the country flashcards. */
+.country-list {
+  display: grid;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+/* This makes each flashcard clickable. */
+.flashcard {
+  position: relative;
+  width: 100%;
+  height: 84px;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  perspective: 800px;
+}
+
+/* This inner part is what flips around. */
+.flashcard-inner {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s ease;
+  transform-style: preserve-3d;
+}
+
+/* JavaScript adds this class when the card is clicked. */
+.flashcard.flipped .flashcard-inner {
+  transform: rotateY(180deg);
+}
+
+/* These styles are shared by the front and back sides. */
+.flashcard-front,
+.flashcard-back {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0 42px 0 16px;
+  border-radius: 8px;
+  border: 2px solid #bfdbfe;
+  backface-visibility: hidden;
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* The front side shows only the country name. */
+.flashcard-front {
+  color: #1d4ed8;
+  background-color: #eff6ff;
+}
+
+/* The back side shows only the capital city. */
+.flashcard-back {
+  color: #be123c;
+  background-color: #fff1f2;
+  border-color: #fecdd3;
+  transform: rotateY(180deg);
+}
+
+/* JavaScript adds "selected" when a country card is tapped. */
+.flashcard.selected .flashcard-front,
+.flashcard.selected .flashcard-back {
+  border-color: #22c55e;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.18);
+}
+
+/* The checkmark lives inside the country-name side of the card. */
+/* It stays hidden until JavaScript adds the selected class to that country card. */
+.flashcard-checkmark {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  font-size: 0.9rem;
+  background-color: white;
+  border: 2px solid #bbf7d0;
+  border-radius: 50%;
+  box-shadow: 0 4px 10px rgba(22, 163, 74, 0.18);
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.8);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* When selected is added, the green checkmark appears. */
+.flashcard.selected .flashcard-checkmark {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* When the card shows the capital side, hide the country-side checkmark. */
+/* The selected country stays tracked, so the checkmark returns if the country side is shown again. */
+.flashcard.flipped .flashcard-checkmark {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+/* This adds a clear outline when using the keyboard. */
+.flashcard:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+/* This keeps the two profile home buttons aligned and the same size. */
+.profile-action-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 10px;
+  width: min(100%, 306px);
+  margin: 14px auto 0;
+}
+
+/* These shared styles make both home action buttons match neatly. */
+#master-list-button,
+#practice-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-height: 90px;
+  margin-top: 0;
+  padding: 12px 10px;
+  font-size: 0.96rem;
+  font-weight: bold;
+  line-height: 1.15;
+  text-align: center;
+  overflow-wrap: anywhere;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* This stacks the emoji above the text on the two main profile action buttons. */
+#master-list-button.stacked-action,
+#practice-button.stacked-action {
+  flex-direction: column;
+  gap: 7px;
+}
+
+/* This centers the larger icon at the top of each action button. */
+.action-button-icon {
+  display: block;
+  font-size: 1.7rem;
+  line-height: 1;
+  text-align: center;
+}
+
+/* This keeps the button label centered and wrapped cleanly on small screens. */
+.action-button-text {
+  display: block;
+  max-width: 100%;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+/* This styles the button that opens the previous learned countries. */
+#master-list-button {
+  color: white;
+  /* Practice Previous Countries uses the requested friendly blue. */
+  background-color: #3B82F6;
+}
+
+#master-list-button.hidden {
+  display: none;
+}
+
+/* This changes the Master List button color when the mouse is over it. */
+#master-list-button:hover {
+  /* The hover color is a deeper blue so the button feels interactive. */
+  background-color: #2563EB;
+}
+
+/* On the Previous Countries menu, this same-size button becomes a Back button. */
+#master-list-button.back-mode {
+  min-height: 77px;
+  color: #1d4ed8;
+  background-color: white;
+  border: 2px solid #bfdbfe;
+}
+
+#master-list-button.back-mode:hover {
+  background-color: #eff6ff;
+}
+
+/* This styles the button that opens the New Countries learning flow. */
+#practice-button {
+  color: white;
+  /* Practice New Countries uses the requested playful pink. */
+  background-color: #F472B6;
+}
+
+/* On the 5-card New Countries screen, this same button becomes a Back button. */
+#practice-button.back-mode {
+  color: #1d4ed8;
+  background-color: white;
+  border: 2px solid #bfdbfe;
+}
+
+#practice-button.hidden {
+  display: none;
+}
+
+/* This changes the Practice button color when the mouse is over it. */
+#practice-button:hover {
+  /* The hover color is a deeper pink for clear feedback. */
+  background-color: #EC4899;
+}
+
+#practice-button.back-mode:hover {
+  background-color: #eff6ff;
+}
+
+/* This Store pill is slightly larger than the coin badge but uses the same rounded style. */
+#store-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  margin: 0;
+  padding: 9px 16px;
+  color: #0f766e;
+  background-color: #f0fdfa;
+  border: 2px solid #99f6e4;
+  border-radius: 999px;
+  box-shadow: 0 8px 18px rgba(15, 118, 110, 0.16);
+  font-size: 1.02rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+#store-button:hover {
+  background-color: #ccfbf1;
+}
+
+#store-button.hidden {
+  display: none;
+}
+
+/* This World Map pill sits in the top-left, opposite the coin and Store controls. */
+#world-map-button {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 9px 16px;
+  color: #1d4ed8;
+  background-color: #eff6ff;
+  border: 2px solid #bfdbfe;
+  border-radius: 999px;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.16);
+  font-size: 1.02rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+#world-map-button:hover {
+  background-color: #dbeafe;
+}
+
+#world-map-button.hidden {
+  display: none;
+}
+
+/* This smaller Back button sits below the main profile actions and returns to profile choices. */
+#profile-home-back-button {
+  display: block;
+  margin: 20px auto 0;
+  padding: 9px 18px;
+  color: #1d4ed8;
+  background-color: white;
+  border: 2px solid #bfdbfe;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#profile-home-back-button:hover {
+  background-color: #eff6ff;
+}
+
+#profile-home-back-button.hidden {
+  display: none;
+}
+
+/* This styles the Store screen without changing the learning screens. */
+.store-section {
+  margin-top: 22px;
+  padding: 16px;
+  background-color: #fff7ed;
+  border: 2px solid #fed7aa;
+  border-radius: 8px;
+}
+
+/* The heading and coin balance stay close together for quick scanning. */
+.store-heading-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.store-heading-row h2 {
+  margin: 0;
+}
+
+/* This shows the player's current Store coin balance. */
+.store-balance {
+  margin: 0;
+  padding: 7px 12px;
+  color: #92400e;
+  background-color: #fffbeb;
+  border: 2px solid #fde68a;
+  border-radius: 999px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.store-message {
+  min-height: 24px;
+  margin: 6px 0 12px;
+  color: #0f766e;
+  font-weight: 700;
+}
+
+.store-items {
+  display: grid;
+  gap: 16px;
+}
+
+.store-category h3 {
+  margin: 0 0 10px;
+  color: #be123c;
+  font-size: 1.1rem;
+}
+
+/* Store items use cards so locked and unlocked choices are easy to compare. */
+.store-item-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.store-item-card {
+  display: grid;
+  gap: 7px;
+  align-content: start;
+  min-height: 220px;
+  padding: 10px;
+  background-color: white;
+  border: 2px solid #fed7aa;
+  border-radius: 8px;
+  box-shadow: 0 8px 18px rgba(15, 118, 110, 0.12);
+}
+
+.store-item-card.unlocked {
+  border-color: #86efac;
+  background-color: #f0fdf4;
+}
+
+.store-item-preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 76px;
+  border-radius: 8px;
+  overflow: hidden;
+  color: white;
+  font-weight: 800;
+  text-align: center;
+}
+
+.store-item-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.preview-passport {
+  background: linear-gradient(135deg, #2563eb, #0f766e);
+}
+
+.preview-effect {
+  background: linear-gradient(135deg, #be123c, #f59e0b);
+}
+
+.preview-title {
+  background: linear-gradient(135deg, #7c3aed, #2563eb);
+}
+
+.store-item-card h4 {
+  margin: 0;
+  color: #1f2937;
+  font-size: 0.98rem;
+  line-height: 1.15;
+}
+
+.store-item-price,
+.store-item-status {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.store-item-price {
+  color: #92400e;
+}
+
+.store-item-status {
+  color: #0f766e;
+}
+
+.store-buy-button {
+  align-self: end;
+  min-height: 38px;
+  padding: 8px 10px;
+  color: white;
+  background-color: #2563eb;
+  border: none;
+  border-radius: 8px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.store-buy-button:hover {
+  background-color: #1d4ed8;
+}
+
+.store-buy-button:disabled {
+  color: #166534;
+  background-color: #bbf7d0;
+  cursor: default;
+}
+
+.store-section .small-secondary-button {
+  margin-top: 16px;
+}
+
+/* This styles the World Map progress screen. */
+.world-map-section {
+  margin-top: 24px;
+  padding: 16px;
+  background-color: #eff6ff;
+  border: 2px solid #bfdbfe;
+  border-radius: 8px;
+}
+
+/* This simple map illustration gives the progress screen a travel feeling. */
+.world-map-illustration {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 150px;
+  margin: 12px 0;
+  border: 2px solid #bfdbfe;
+  border-radius: 8px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 35% 35%, rgba(143, 211, 216, 0.85), transparent 26%),
+    radial-gradient(circle at 68% 58%, rgba(244, 184, 168, 0.72), transparent 28%),
+    linear-gradient(135deg, #cfe8ff, #f0fdfa);
+}
+
+.world-globe {
+  font-size: 4rem;
+  filter: drop-shadow(0 8px 12px rgba(15, 118, 110, 0.18));
+}
+
+.map-label {
+  position: absolute;
+  padding: 4px 8px;
+  color: #0f766e;
+  background-color: rgba(255, 255, 255, 0.82);
+  border: 1px solid #99f6e4;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 800;
+}
+
+.map-europe {
+  top: 18%;
+  left: 43%;
+}
+
+.map-asia {
+  top: 27%;
+  right: 14%;
+}
+
+.map-africa {
+  top: 55%;
+  left: 45%;
+}
+
+.map-north-america {
+  top: 28%;
+  left: 8%;
+}
+
+.map-south-america {
+  bottom: 13%;
+  left: 22%;
+}
+
+.map-oceania {
+  right: 8%;
+  bottom: 16%;
+}
+
+.world-map-message {
+  min-height: 24px;
+  margin: 6px 0 12px;
+  color: #be123c;
+  font-weight: 700;
+}
+
+.world-total-card {
+  margin-bottom: 14px;
+  padding: 12px;
+  color: #0f766e;
+  background-color: white;
+  border: 2px solid #99f6e4;
+  border-radius: 8px;
+  box-shadow: 0 8px 18px rgba(15, 118, 110, 0.1);
+}
+
+.world-total-card h3,
+.world-total-card p {
+  margin: 0;
+}
+
+.world-total-card p {
+  margin-top: 6px;
+  font-weight: 800;
+}
+
+.world-progress-list {
+  display: grid;
+  gap: 12px;
+}
+
+.world-progress-card {
+  padding: 12px;
+  background-color: white;
+  border: 2px solid #bfdbfe;
+  border-radius: 8px;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.world-progress-card:hover,
+.world-progress-card:focus-visible {
+  border-color: #93c5fd;
+  box-shadow: 0 10px 22px rgba(37, 99, 235, 0.14);
+  transform: translateY(-1px);
+}
+
+.world-progress-card:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
+.world-progress-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.world-progress-title-row h3,
+.world-progress-card p {
+  margin: 0;
+}
+
+.world-progress-title-row h3 {
+  color: #1d4ed8;
+  font-size: 1.02rem;
+}
+
+.world-progress-title-row span {
+  color: #be123c;
+  font-weight: 800;
+}
+
+.world-progress-bar {
+  height: 14px;
+  margin: 10px 0 8px;
+  background-color: #dbeafe;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.world-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #0f766e, #38bdf8, #f4b8a8);
+  border-radius: 999px;
+}
+
+.world-progress-card p {
+  color: #475569;
+  font-size: 0.96rem;
+  font-weight: 700;
+}
+
+/* This hidden list expands only after the player clicks a continent card. */
+.world-mastered-list {
+  max-height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  color: #334155;
+  text-align: left;
+  list-style-position: inside;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: max-height 0.28s ease, margin-top 0.28s ease, opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* The expanded card reveals only the mastered country names for that continent. */
+.world-progress-card.expanded .world-mastered-list {
+  max-height: 240px;
+  margin-top: 10px;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.world-mastered-list li {
+  margin: 4px 0;
+  font-size: 0.94rem;
+  font-weight: 700;
+}
+
+.world-map-section .small-secondary-button {
+  margin-top: 16px;
+}
+
+/* This styles the Previous Countries choice menu. */
+.previous-countries-section {
+  margin-top: 24px;
+  padding: 16px;
+  background-color: #eff6ff;
+  border: 2px solid #bfdbfe;
+  border-radius: 8px;
+}
+
+/* This stacks the two Previous Countries choices neatly on phones. */
+.previous-countries-menu {
+  display: grid;
+  gap: 12px;
+  width: min(100%, 280px);
+  margin: 14px auto 0;
+}
+
+/* These buttons open either the learned list or Practice Mode. */
+#show-learned-list-button,
+#quiz-learned-countries-button {
+  min-height: 54px;
+  padding: 12px 14px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#show-learned-list-button {
+  color: white;
+  background-color: #0f766e;
+}
+
+#show-learned-list-button:hover {
+  background-color: #0f5f59;
+}
+
+#quiz-learned-countries-button {
+  color: white;
+  background-color: #2563eb;
+}
+
+#quiz-learned-countries-button:hover {
+  background-color: #1d4ed8;
+}
+
+/* This styles the Master List box. */
+.master-list-section {
+  margin-top: 24px;
+  padding: 16px;
+  background-color: #f0fdfa;
+  border: 2px solid #99f6e4;
+  border-radius: 8px;
+}
+
+/* This keeps the Master List neat and easy to read. */
+#master-list {
+  display: grid;
+  gap: 12px;
+  margin: 14px 0 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+/* Each Master List item holds one country-capital flip card. */
+#master-list li {
+  margin: 0;
+}
+
+/* This makes each Master List country act like a flashcard. */
+.master-flashcard {
+  position: relative;
+  width: 100%;
+  height: 76px;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  perspective: 800px;
+}
+
+/* This inner part flips between country and capital. */
+.master-flashcard-inner {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s ease;
+  transform-style: preserve-3d;
+}
+
+/* JavaScript toggles this class when the card is tapped. */
+.master-flashcard.flipped .master-flashcard-inner {
+  transform: rotateY(180deg);
+}
+
+/* These two sides hold the country name and saved capital. */
+.master-flashcard-front,
+.master-flashcard-back {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0 44px 0 16px;
+  border-radius: 8px;
+  border: 2px solid #99f6e4;
+  backface-visibility: hidden;
+    font-size: 1.05rem;
+    font-weight: bold;
+    line-height: 1.2;
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+/* The front side shows the country name. */
+.master-flashcard-front {
+  color: #0f766e;
+  background-color: white;
+}
+
+/* The back side shows the capital saved with that country. */
+.master-flashcard-back {
+  color: #be123c;
+  background-color: #fff1f2;
+  border-color: #fecdd3;
+  transform: rotateY(180deg);
+}
+
+/* This styles the latest correct/incorrect status icon. */
+.country-status {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 3;
+  min-width: 26px;
+  min-height: 26px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.95rem;
+  background-color: white;
+  border: 2px solid #bbf7d0;
+  border-radius: 50%;
+  box-shadow: 0 4px 10px rgba(22, 163, 74, 0.16);
+  pointer-events: none;
+}
+
+.country-status:empty {
+  display: none;
+}
+
+.master-flashcard:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+/* This styles the button that returns to the flashcards. */
+#back-to-learning-button {
+  margin-top: 16px;
+  padding: 10px 18px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  background-color: #0f766e;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* This changes the Back to Learning button color when the mouse is over it. */
+#back-to-learning-button:hover {
+  background-color: #0f5f59;
+}
+
+/* This styles the Practice Mode box. */
+.practice-section {
+  margin-top: 24px;
+  padding: 16px;
+  background-color: #fff7ed;
+  border: 2px solid #fed7aa;
+  border-radius: 8px;
+}
+
+/* This styles the practice question. */
+#practice-question {
+  color: #1d4ed8;
+  font-weight: bold;
+}
+
+/* This holds the multiple-choice answer buttons. */
+#answer-choices {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+/* This styles each multiple-choice answer. */
+.choice-button {
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #1f2937;
+  background-color: white;
+  border: 2px solid #bfdbfe;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* This changes an answer button when the mouse is over it. */
+.choice-button:hover {
+  background-color: #eff6ff;
+}
+
+/* This styles Practice Mode feedback. */
+#practice-feedback {
+  min-height: 28px;
+  color: #0f766e;
+  font-weight: bold;
+}
+
+/* This styles the Next Question button. */
+#next-question-button {
+  margin-top: 8px;
+  padding: 10px 18px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  background-color: #0f766e;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* This changes the Next Question button color when the mouse is over it. */
+#next-question-button:hover {
+  background-color: #0f5f59;
+}
+
+/* This overlay appears briefly when a country becomes mastered. */
+.mastery-celebration {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 18px;
+  background-color: rgba(15, 23, 42, 0.3);
+  pointer-events: none;
+  animation: celebration-fade 1.8s ease forwards;
+}
+
+.mastery-celebration.hidden {
+  display: none;
+}
+
+/* This makes the passport feel like a small travel book. */
+.passport-book {
+  display: flex;
+  width: min(280px, 76vw);
+  min-height: 170px;
+  background-color: #fef3c7;
+  border: 4px solid #1d4ed8;
+  border-radius: 8px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.28);
+  overflow: hidden;
+  transform: rotate(-2deg);
+}
+
+.passport-cover {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34%;
+  color: #fef3c7;
+  background-color: #1d4ed8;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  writing-mode: vertical-rl;
+}
+
+.passport-page {
+  position: relative;
+  flex: 1;
+  background:
+    linear-gradient(90deg, rgba(37, 99, 235, 0.08) 1px, transparent 1px),
+    linear-gradient(#fff7ed 0%, #fffbeb 100%);
+  background-size: 18px 18px, auto;
+}
+
+/* The new stamp drops down and lands on the passport page. */
+.earned-passport-stamp {
+  position: absolute;
+  left: 50%;
+  top: 44%;
+  display: grid;
+  place-items: center;
+  width: 118px;
+  height: 76px;
+  padding: 8px;
+  color: #be123c;
+  background-color: rgba(255, 241, 242, 0.74);
+  border: 4px double #be123c;
+  border-radius: 50%;
+  font-size: 0.76rem;
+  font-weight: 700;
+  line-height: 1.1;
+  text-align: center;
+  text-transform: uppercase;
+  transform: translate(-50%, -190%) rotate(-12deg) scale(1.2);
+  animation: stamp-drop 1.05s cubic-bezier(0.2, 0.9, 0.25, 1.18) forwards;
+}
+
+#earned-stamp-country {
+  max-width: 92px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* THUMP appears right when the stamp lands. */
+.stamp-thump {
+  position: absolute;
+  left: 50%;
+  top: 70%;
+  color: #b45309;
+  font-size: 1.1rem;
+  font-weight: 700;
+  transform: translateX(-50%) scale(0.5);
+  opacity: 0;
+  animation: thump-pop 0.46s ease 0.72s forwards;
+}
+
+/* Confetti pieces are created by JavaScript and burst out quickly. */
+.celebration-confetti {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.confetti-piece {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  width: 8px;
+  height: 12px;
+  border-radius: 3px;
+  animation: confetti-burst 0.78s ease-out 0.82s forwards;
+}
+
+.celebration-text {
+  max-width: 180px;
+  padding: 14px;
+  color: #0f766e;
+  background-color: white;
+  border: 2px solid #99f6e4;
+  border-radius: 8px;
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.22);
+  animation: celebration-text-pop 0.44s ease 0.82s both;
+}
+
+.celebration-text h2 {
+  margin: 0 0 6px;
+  color: #2563eb;
+  font-size: 1.18rem;
+}
+
+.celebration-text p {
+  margin: 4px 0;
+  color: #0f766e;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+@keyframes stamp-drop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -190%) rotate(-12deg) scale(1.2);
+  }
+
+  68% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(-8deg) scale(1);
+  }
+
+  82% {
+    transform: translate(-50%, -50%) rotate(-8deg) scale(1.08);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(-8deg) scale(1);
+  }
+}
+
+@keyframes thump-pop {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.5);
+  }
+
+  45% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+@keyframes confetti-burst {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(var(--confetti-x), var(--confetti-y)) rotate(220deg);
+  }
+}
+
+@keyframes celebration-text-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes celebration-fade {
+  0%,
+  82% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+/* This makes the coin badge fit smaller mobile screens. */
+@media (max-width: 480px) {
+  /* On small screens, the top game bar tightens its spacing so both pills fit. */
+  .top-game-bar {
+    top: 10px;
+    right: 10px;
+    gap: 6px;
+  }
+
+  #coin-count {
+    min-width: 66px;
+    padding: 7px 10px;
+    font-size: 0.96rem;
+  }
+
+  #store-button {
+    min-height: 40px;
+    padding: 7px 11px;
+    font-size: 0.94rem;
+  }
+
+  /* The World Map pill also shrinks a little so it fits opposite the coin and Store row. */
+  #world-map-button {
+    top: 10px;
+    left: 10px;
+    min-height: 40px;
+    padding: 7px 10px;
+    font-size: 0.94rem;
+  }
+
+  .world-map-section {
+    padding: 14px;
+  }
+
+  .world-map-illustration {
+    min-height: 130px;
+  }
+
+  .new-countries-mode-buttons {
+    grid-template-columns: 1fr;
+  }
+
+  .world-globe {
+    font-size: 3.4rem;
+  }
+
+  .map-label {
+    padding: 3px 6px;
+    font-size: 0.66rem;
+  }
+
+  .welcome-option {
+    min-height: 64px;
+    padding: 12px;
+    font-size: 1rem;
+  }
+
+  .profile-choice-panel {
+    padding: 14px;
+  }
+
+  .profile-card {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .profile-select-button {
+    justify-content: center;
+  }
+
+  .profile-delete-button {
+    width: 100%;
+  }
+
+  .avatar-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .avatar-card {
+    min-height: 146px;
+  }
+
+  .avatar-image {
+    aspect-ratio: 16 / 9;
+  }
+
+  .mastery-celebration {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .celebration-text {
+    max-width: 260px;
+  }
+
+  .store-heading-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .store-item-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* On small screens, fewer decorations keeps the game card clean. */
+  .travel-decor {
+    opacity: 0.16;
+  }
+
+  .route {
+    width: 220px;
+    opacity: 0.1;
+  }
+
+  .route-top {
+    top: 4%;
+    left: 4%;
+  }
+
+  .route-bottom {
+    display: none;
+  }
+
+  .stamp {
+    font-size: 0.7rem;
+    padding: 5px 8px;
+  }
+
+  .stamp-two,
+  .flag-japan,
+  .flag-india,
+  .landmark-taj,
+  .landmark-colosseum {
+    display: none;
+  }
+
+  .sticker {
+    width: 42px;
+    height: 42px;
+  }
+
+  .flag-image {
+    width: 38px;
+  }
+
+  .sticker-plane {
+    top: 13%;
+    right: 4%;
+  }
+
+  .sticker-bag {
+    bottom: 8%;
+    left: 4%;
+  }
+
+  .globe-icon {
+    bottom: 3%;
+    left: 22%;
+  }
+
+  .compass-icon {
+    right: 6%;
+    bottom: 16%;
+  }
+
+  .landmark {
+    width: 62px;
+    opacity: 0.12;
+  }
+
+  .landmark-eiffel {
+    right: 9%;
+    bottom: 2%;
+  }
+
+  .landmark-liberty {
+    top: 6%;
+    left: 20%;
+  }
+
+  .landmark-opera {
+    top: 74%;
+    right: 3%;
+    width: 66px;
+  }
+}

@@ -1,0 +1,403 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Country Capitals Game</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- These decorations are only for the travel theme, so screen readers can ignore them. -->
+  <div class="travel-decorations" aria-hidden="true">
+    <!-- Dashed routes add a soft map-and-flight feeling near the page edges. -->
+    <svg class="route route-top" viewBox="0 0 320 110">
+      <path d="M8 78 C70 18, 138 20, 190 62 S280 96, 312 34" />
+    </svg>
+    <svg class="route route-bottom" viewBox="0 0 340 120">
+      <path d="M12 40 C80 104, 168 104, 222 54 S300 8, 330 74" />
+    </svg>
+
+    <span class="travel-decor stamp stamp-one">PASSPORT</span>
+    <span class="travel-decor stamp stamp-two">EXPLORE</span>
+
+    <!-- Travel sticker icons are simple SVGs, so they look clean at small sizes. -->
+    <svg class="travel-decor sticker sticker-plane" viewBox="0 0 64 64">
+      <path class="sticker-paper" d="M7 35 57 10 42 56 31 39 14 48Z" />
+      <path class="sticker-detail" d="M57 10 31 39 M42 56 35 36 M14 48l17-9" />
+    </svg>
+
+    <svg class="travel-decor sticker sticker-bag" viewBox="0 0 64 64">
+      <rect class="sticker-paper" x="15" y="22" width="34" height="34" rx="8" />
+      <path class="sticker-detail" d="M24 22v-6c0-5 16-5 16 0v6 M24 31h16 M24 40h16" />
+    </svg>
+
+    <svg class="travel-decor sticker globe-icon" viewBox="0 0 64 64">
+      <circle class="sticker-paper" cx="32" cy="28" r="20" />
+      <path class="sticker-detail" d="M12 28h40 M32 8c7 7 7 33 0 40 M32 8c-7 7-7 33 0 40 M18 14c7 5 21 5 28 0 M18 42c7-5 21-5 28 0 M25 50h14 M20 56h24" />
+    </svg>
+
+    <svg class="travel-decor sticker compass-icon" viewBox="0 0 64 64">
+      <circle class="sticker-paper" cx="32" cy="32" r="24" />
+      <path class="sticker-detail" d="M32 6v10 M32 48v10 M6 32h10 M48 32h10 M32 12l6 16 14 4-14 4-6 16-6-16-14-4 14-4Z M26 26l12 12" />
+    </svg>
+
+    <!-- These are small real flag graphics from different continents. -->
+    <svg class="travel-decor flag-image flag-france" viewBox="0 0 60 40">
+      <rect width="60" height="40" rx="5" fill="#ffffff" />
+      <path d="M0 0h20v40H0Z" fill="#1f4fa3" />
+      <path d="M40 0h20v40H40Z" fill="#e23b4a" />
+    </svg>
+
+    <svg class="travel-decor flag-image flag-japan" viewBox="0 0 60 40">
+      <rect width="60" height="40" rx="5" fill="#ffffff" />
+      <circle cx="30" cy="20" r="11" fill="#bc002d" />
+    </svg>
+
+    <svg class="travel-decor flag-image flag-india" viewBox="0 0 60 40">
+      <rect width="60" height="40" rx="5" fill="#ffffff" />
+      <path d="M0 0h60v13.3H0Z" fill="#ff9933" />
+      <path d="M0 26.7h60V40H0Z" fill="#138808" />
+      <circle cx="30" cy="20" r="5.4" fill="none" stroke="#000080" stroke-width="1.5" />
+      <path d="M30 14.6v10.8 M24.6 20h10.8 M26.2 16.2l7.6 7.6 M33.8 16.2l-7.6 7.6" stroke="#000080" stroke-width="0.8" />
+    </svg>
+
+    <svg class="travel-decor flag-image flag-brazil" viewBox="0 0 60 40">
+      <rect width="60" height="40" rx="5" fill="#229e45" />
+      <path d="M30 6 54 20 30 34 6 20Z" fill="#f8dd3c" />
+      <circle cx="30" cy="20" r="9" fill="#2b55a2" />
+      <path d="M22 18c7-2 13-1 16 3" stroke="#ffffff" stroke-width="2" fill="none" />
+    </svg>
+
+    <svg class="travel-decor flag-image flag-kenya" viewBox="0 0 60 40">
+      <rect width="60" height="40" rx="5" fill="#ffffff" />
+      <path d="M0 0h60v12H0Z" fill="#111111" />
+      <path d="M0 14h60v12H0Z" fill="#bb1e32" />
+      <path d="M0 28h60v12H0Z" fill="#1f8a3b" />
+      <ellipse cx="30" cy="20" rx="5" ry="12" fill="#bb1e32" />
+      <path d="M30 9v22 M24 12l12 16 M36 12 24 28" stroke="#ffffff" stroke-width="1.2" />
+    </svg>
+
+    <svg class="travel-decor flag-image flag-australia" viewBox="0 0 60 40">
+      <rect width="60" height="40" rx="5" fill="#1f4fa3" />
+      <path d="M0 0h28v18H0Z" fill="#263a8b" />
+      <path d="M0 0 28 18M28 0 0 18" stroke="#ffffff" stroke-width="4" />
+      <path d="M0 0 28 18M28 0 0 18" stroke="#d72828" stroke-width="2" />
+      <path d="M14 0v18M0 9h28" stroke="#ffffff" stroke-width="6" />
+      <path d="M14 0v18M0 9h28" stroke="#d72828" stroke-width="3" />
+      <path d="M44 9l2 5 5-2-3 5 4 3-5 1 1 5-4-3-4 3 1-5-5-1 4-3-3-5 5 2Z" fill="#ffffff" />
+    </svg>
+
+    <!-- Sticker-style landmarks add a polished travel-poster feeling near the edges. -->
+    <svg class="landmark landmark-eiffel" viewBox="0 0 90 120">
+      <path class="landmark-sticker" d="M45 6 20 108h50L45 6Z M33 44h24 M27 70h36 M18 108h54 M39 24h12 M34 90h22" />
+      <path class="landmark-fill" d="M45 12 24 106h42Z" />
+      <path class="landmark-line" d="M45 12 24 106 M45 12l21 94 M33 44h24 M27 70h36 M18 106h54 M35 88h20 M39 24h12" />
+    </svg>
+
+    <svg class="landmark landmark-liberty" viewBox="0 0 90 120">
+      <path class="landmark-sticker" d="M45 12 34 32h22L45 12Z M31 36h28v46H31Z M24 82h42v20H24Z M20 102h50 M37 27 22 17 M43 25V8 M50 27 66 17 M58 42l17 18" />
+      <path class="landmark-fill" d="M34 34h22v48H34Z M27 84h36v18H27Z M45 13l-9 18h18Z" />
+      <path class="landmark-line" d="M45 13 36 31h18Z M34 38h22v44H34Z M27 84h36v18H27 M37 27 22 17 M43 25V8 M50 27 66 17 M57 42l16 18" />
+    </svg>
+
+    <svg class="landmark landmark-taj" viewBox="0 0 120 90">
+      <path class="landmark-sticker" d="M10 76h100 M24 76V48h72v28 M38 48c4-27 40-27 44 0 M18 76V48 M102 76V48 M43 76V58 M77 76V58 M38 30h44 M60 15v15" />
+      <path class="landmark-fill" d="M24 48h72v28H24Z M38 48c4-25 40-25 44 0Z M17 50h12v26H17Z M91 50h12v26H91Z" />
+      <path class="landmark-line" d="M10 76h100 M24 76V48h72v28 M38 48c4-25 40-25 44 0 M18 76V50 M102 76V50 M43 76V58 M77 76V58 M38 30h44 M60 15v15" />
+    </svg>
+
+    <svg class="landmark landmark-colosseum" viewBox="0 0 120 80">
+      <path class="landmark-sticker" d="M12 66h96V32C88 12 32 12 12 32Z M24 66V43 M42 66V34 M60 66V30 M78 66V34 M96 66V43 M22 32h76" />
+      <path class="landmark-fill" d="M15 64h90V34C86 18 34 18 15 34Z" />
+      <path class="landmark-line" d="M12 66h96V32C88 12 32 12 12 32Z M24 66V43 M42 66V34 M60 66V30 M78 66V34 M96 66V43 M22 32h76" />
+    </svg>
+
+    <svg class="landmark landmark-opera" viewBox="0 0 120 80">
+      <path class="landmark-sticker" d="M10 64h100 M22 62C34 24 50 15 60 60 M48 62C62 18 78 14 91 60 M72 62C84 34 98 30 110 60" />
+      <path class="landmark-fill" d="M23 61C35 25 50 16 59 60Z M49 61C63 20 77 15 90 60Z M74 61C84 35 97 31 108 60Z" />
+      <path class="landmark-line" d="M10 64h100 M22 62C34 24 50 15 60 60 M48 62C62 18 78 14 91 60 M72 62C84 34 98 30 110 60" />
+    </svg>
+  </div>
+
+  <!-- This is the main card on the page. -->
+  <main class="game-card">
+    <h1>Country Capitals Game</h1>
+
+    <!-- This top game bar keeps the coin counter and Store button beside each other. -->
+    <div class="top-game-bar">
+      <p id="coin-count" aria-label="Coins">&#129689; 0</p>
+      <button id="store-button" class="hidden" type="button">&#127978; Store</button>
+    </div>
+
+    <!-- This World Map button sits opposite the coin and Store controls while the game is open. -->
+    <button id="world-map-button" class="hidden" type="button">&#127757; World Map</button>
+
+    <!-- This welcome screen appears before the player enters the game. -->
+    <section id="profile-section" class="profile-section">
+      <!-- This is the main home view with the three starting choices. -->
+      <section class="home-options-view">
+        <h2>Welcome, Explorer!</h2>
+        <p>Choose how you want to start your country capitals adventure.</p>
+
+        <!-- These three large buttons let the player choose a profile path. -->
+        <div class="welcome-options">
+          <button id="existing-profile-button" class="welcome-option option-existing" type="button">
+            <span class="welcome-option-icon" aria-hidden="true">👤</span>
+            <span>Existing Profile</span>
+          </button>
+          <button id="make-profile-button" class="welcome-option option-create" type="button">
+            <span class="welcome-option-icon" aria-hidden="true">✨</span>
+            <span>New Profile</span>
+          </button>
+          <button id="guest-button" class="welcome-option option-guest" type="button">
+            <span class="welcome-option-icon" aria-hidden="true">👋</span>
+            <span>Guest Player</span>
+          </button>
+        </div>
+
+        <button id="about-button" class="about-button" type="button">About</button>
+        <p class="creator-signature welcome-creator-signature">&#127758; Created by Vanshika, Age 11</p>
+      </section>
+
+      <p id="about-creator-signature" class="creator-signature about-creator-signature hidden">&#127758; Created by Vanshika, Age 11</p>
+
+      <!-- This app-level information screen opens from the welcome choices. -->
+      <section id="about-section" class="profile-choice-panel about-section hidden">
+        <h3>Country App</h3>
+        <p>Learn countries, capitals, and continents through fun games, flashcards, quizzes, rewards, and progress tracking.</p>
+        <p>Built with HTML, CSS, JavaScript, and JSON.</p>
+
+        <h4>Features:</h4>
+        <ul class="about-feature-list">
+          <li>Profiles</li>
+          <li>Flashcards</li>
+          <li>Quiz mode</li>
+          <li>Progress tracking</li>
+          <li>Rewards and Store</li>
+          <li>World progress</li>
+        </ul>
+
+        <p class="about-version">Version 1.0</p>
+        <button id="back-to-welcome-from-about" class="small-secondary-button" type="button">Back</button>
+      </section>
+
+      <!-- JavaScript fills this area with profiles saved in localStorage. -->
+      <section id="existing-profile-section" class="profile-choice-panel hidden">
+        <h3>Choose Your Profile</h3>
+        <div id="existing-profile-list" class="profile-list"></div>
+        <p id="no-profiles-message" class="hidden">No saved profiles yet. Make a profile first!</p>
+
+        <!-- This confirmation dialog helps prevent accidental profile deletion. -->
+        <section id="delete-profile-dialog" class="delete-profile-dialog hidden" role="dialog" aria-modal="true" aria-labelledby="delete-profile-title">
+          <h3 id="delete-profile-title">Delete Profile?</h3>
+          <p id="delete-profile-name"></p>
+          <p>Deleting this profile will permanently remove:</p>
+          <ul class="delete-warning-list">
+            <li>coins</li>
+            <li>learned countries</li>
+            <li>progress</li>
+            <li>achievements</li>
+            <li>saved data</li>
+          </ul>
+          <div class="delete-dialog-actions">
+            <button id="cancel-delete-profile-button" class="small-secondary-button" type="button">Cancel</button>
+            <button id="confirm-delete-profile-button" type="button">Delete Profile</button>
+          </div>
+        </section>
+
+        <button id="back-to-welcome-from-existing" class="small-secondary-button" type="button">Back</button>
+      </section>
+
+      <!-- This small form creates a new saved profile. -->
+      <section id="make-profile-section" class="profile-choice-panel hidden">
+        <h3>Make a Profile</h3>
+        <label for="profile-name-input">Profile name</label>
+        <input id="profile-name-input" type="text" maxlength="18" placeholder="Explorer name">
+        <button id="create-profile-button" type="button">Next: Choose Avatar</button>
+        <p id="create-profile-message"></p>
+        <button id="back-to-welcome-from-create" class="small-secondary-button" type="button">Back</button>
+      </section>
+
+      <!-- JavaScript adds landmark avatar cards to this grid. -->
+      <section id="avatar-section" class="profile-choice-panel hidden">
+        <h3>Choose a Landmark Avatar</h3>
+        <p class="avatar-help">Pick one landmark for your explorer profile.</p>
+        <div id="avatar-grid" class="avatar-grid"></div>
+        <p id="avatar-message"></p>
+        <button id="back-from-avatar-button" class="small-secondary-button" type="button">Back</button>
+      </section>
+    </section>
+
+    <!-- The game stays hidden until a profile is selected. -->
+    <section id="game-section" class="game-section hidden">
+      <!-- This saved-profile badge opens the landmark avatar settings. -->
+      <button id="profile-settings-button" class="profile-settings-button hidden" type="button">
+        <span id="profile-avatar-display" class="profile-avatar-display"></span>
+        <span id="profile-name-display">Profile</span>
+      </button>
+
+      <!-- This message welcomes the player. -->
+      <p id="welcome-message">Welcome! Get ready to learn capital cities around the world.</p>
+
+      <!-- This section is shown when the New Countries button is clicked. -->
+      <section id="learning-section" class="hidden">
+        <h2>Countries to Learn Today</h2>
+
+        <!-- These buttons let the user choose a mixed set first, then keep continent-specific options grouped below it. -->
+        <div id="continent-picker" class="continent-picker" aria-label="Choose countries to learn">
+          <button class="continent-button mix-match-button" type="button" data-continent="Mix and Match">Mix and Match</button>
+
+          <!-- The OR separator shows Mix and Match is one path, while the grouped continent buttons are another path. -->
+          <div class="choice-separator" aria-hidden="true">
+            <span></span>
+            <strong>OR</strong>
+            <span></span>
+          </div>
+
+          <!-- The continent options remain grouped together below Mix and Match in the same order as before. -->
+          <div class="continent-options-group" aria-label="Choose one continent">
+            <button class="continent-button" type="button" data-continent="Europe">Europe</button>
+            <button class="continent-button" type="button" data-continent="Asia">Asia</button>
+            <button class="continent-button" type="button" data-continent="Africa">Africa</button>
+            <button class="continent-button" type="button" data-continent="North America">North America</button>
+            <button class="continent-button" type="button" data-continent="South America">South America</button>
+            <button class="continent-button" type="button" data-continent="Oceania">Oceania</button>
+          </div>
+        </div>
+
+        <!-- This message appears while countries are loading from the bundled JSON file. -->
+        <p id="loading-message" class="hidden">Loading European countries...</p>
+
+        <!-- This message appears if the bundled country data cannot load. -->
+        <p id="error-message" class="hidden"></p>
+
+        <!-- The 2-step flow shows this after the user picks Mix and Match or one continent. -->
+        <section id="new-countries-mode-section" class="new-countries-mode-section hidden">
+          <h3>Choose Practice Type</h3>
+          <p id="new-countries-selection-label"></p>
+          <div class="new-countries-mode-buttons">
+            <button id="new-countries-quiz-button" type="button">Quiz</button>
+            <button id="new-countries-flashcards-button" type="button">Flash Cards</button>
+          </div>
+        </section>
+
+        <!-- JavaScript will add 5 flashcards here. -->
+        <div id="country-list" class="country-list"></div>
+        <button id="quiz-current-flashcards-button" class="hidden" type="button">Quiz Me</button>
+      </section>
+
+      <!-- These profile action buttons stay aligned and update with JavaScript. -->
+      <div class="profile-action-buttons">
+        <!-- This button opens the Master List panel. -->
+        <button id="master-list-button" class="hidden" type="button">🎯 Practice Previous Countries (0)</button>
+
+        <!-- This button loads a new set of countries to learn. -->
+        <button id="practice-button" class="hidden" type="button">🌍 Practice New Countries</button>
+      </div>
+
+      <!-- This button returns from the profile home screen to the first profile choices. -->
+      <button id="profile-home-back-button" class="hidden" type="button">← Back</button>
+
+      <!-- This Store lets players spend earned coins on fun profile extras. -->
+      <section id="store-section" class="store-section hidden">
+        <div class="store-heading-row">
+          <h2>Store</h2>
+          <p id="store-balance" class="store-balance">&#129689; 0</p>
+        </div>
+
+        <p id="store-message" class="store-message" aria-live="polite"></p>
+
+        <!-- JavaScript adds Store categories and item cards here. -->
+        <div id="store-items" class="store-items"></div>
+
+        <button id="back-from-store-button" class="small-secondary-button" type="button">← Back</button>
+      </section>
+
+      <!-- This screen shows mastered-country progress for each continent. -->
+      <section id="world-map-section" class="world-map-section hidden">
+        <h2>World Map</h2>
+
+        <!-- This simple map keeps the screen playful without changing the learning game. -->
+        <div class="world-map-illustration" aria-hidden="true">
+          <span class="world-globe">🌍</span>
+          <span class="map-label map-europe">Europe</span>
+          <span class="map-label map-asia">Asia</span>
+          <span class="map-label map-africa">Africa</span>
+          <span class="map-label map-north-america">North America</span>
+          <span class="map-label map-south-america">South America</span>
+          <span class="map-label map-oceania">Oceania</span>
+        </div>
+
+        <p id="world-map-message" class="world-map-message" aria-live="polite"></p>
+
+        <section class="world-total-card">
+          <h3>🌍 Total World Progress</h3>
+          <p id="world-total-progress">Loading...</p>
+        </section>
+
+        <!-- JavaScript adds continent progress cards here. -->
+        <div id="world-progress-list" class="world-progress-list"></div>
+
+        <button id="back-from-world-map-button" class="small-secondary-button" type="button">← Back</button>
+      </section>
+
+      <!-- This menu appears when the Previous Countries button is clicked. -->
+      <section id="previous-countries-section" class="previous-countries-section hidden">
+        <h2>Previous Countries</h2>
+
+        <!-- These buttons let the player choose list review or quiz practice. -->
+        <div class="previous-countries-menu">
+          <button id="show-learned-list-button" type="button">📋 Show Me The List</button>
+          <button id="quiz-learned-countries-button" type="button">🎯 Quiz Me</button>
+        </div>
+      </section>
+
+      <!-- This section shows every country the user has seen in this session. -->
+      <section id="master-list-section" class="master-list-section hidden">
+        <h2>Master List</h2>
+
+        <!-- This button returns to the Previous Countries menu. -->
+        <button id="back-to-learning-button" type="button">← Back</button>
+
+        <!-- JavaScript will add country names to this list. -->
+        <ul id="master-list"></ul>
+      </section>
+
+      <!-- This section shows one Practice Mode question at a time. -->
+      <section id="practice-section" class="practice-section hidden">
+        <h2>Practice Mode</h2>
+        <p id="practice-question"></p>
+
+        <!-- JavaScript will add multiple-choice answers here. -->
+        <div id="answer-choices"></div>
+
+        <p id="practice-feedback"></p>
+        <button id="next-question-button" class="hidden" type="button">Next Question</button>
+      </section>
+    </section>
+  </main>
+
+  <!-- This short celebration appears when a country is mastered. -->
+  <section id="mastery-celebration" class="mastery-celebration hidden" aria-live="polite">
+    <div class="passport-book">
+      <div class="passport-cover">PASSPORT</div>
+      <div class="passport-page">
+        <div id="celebration-confetti" class="celebration-confetti"></div>
+        <div id="earned-passport-stamp" class="earned-passport-stamp">
+          <span id="earned-stamp-country">Country</span>
+          <span>MASTERED</span>
+        </div>
+        <div id="stamp-thump" class="stamp-thump">THUMP</div>
+      </div>
+    </div>
+    <div class="celebration-text">
+      <h2>Country Mastered!</h2>
+      <p>Passport Stamp Earned!</p>
+      <p>+5 Bonus Coins</p>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
