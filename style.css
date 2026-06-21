@@ -2274,3 +2274,49 @@ label {
     width: 66px;
   }
 }
+
+/* ===== Startup Screen ===== */
+
+#startup-screen {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(180deg,#0B3D91,#1A73E8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  color: white;
+  text-align: center;
+}
+
+.startup-content {
+  animation: startupFade 1s ease;
+}
+
+.startup-globe {
+  font-size: 90px;
+  margin-bottom: 20px;
+}
+
+.startup-author {
+  font-size: 20px;
+  opacity: .9;
+}
+
+.startup-tagline {
+  margin-top: 25px;
+  color: #FFD54F;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+@keyframes startupFade {
+  from {
+    opacity: 0;
+    transform: scale(.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

@@ -2626,3 +2626,21 @@ nextQuestionButton.addEventListener("click", function () {
     showPracticeQuestion();
   }
 });
+// Show the startup screen for 2.5 seconds and then fade it away.
+window.addEventListener("load", function () {
+  setTimeout(function () {
+    const startupScreen = document.querySelector("#startup-screen");
+
+    if (!startupScreen) {
+      return;
+    }
+
+    startupScreen.style.transition = "opacity 0.8s ease";
+    startupScreen.style.opacity = "0";
+
+    setTimeout(function () {
+      startupScreen.style.display = "none";
+    }, 800);
+
+  }, 2500);
+});
